@@ -40,7 +40,7 @@ export default class MyNavbar extends React.Component {
               <NavItem>
                 <NavLink href="https://github.com/reactstrap/reactstrap">Products</NavLink>
               </NavItem>
-              <UncontrolledDropdown nav inNavbar>
+              <UncontrolledDropdown nav>
                 <DropdownToggle nav caret>
                   List
                 </DropdownToggle>

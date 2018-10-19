@@ -4,9 +4,9 @@ from .models import Product, Category
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'tag_price', 'active']
+    list_display = ['title', 'category', 'tag_value', 'active']
     list_filter = ['active', 'category', ]
-    readonly_fields = ['tag_price', ]
+    readonly_fields = ['tag_value', ]
     search_fields = ['title', 'category__title']
 
 
