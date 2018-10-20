@@ -18,7 +18,8 @@ class TableDetailSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='', read_only=True)
+    url = serializers.HyperlinkedIdentityField(view_name='order-detail', 
+                                               read_only=True)
 
     class Meta:
         model = Order
@@ -32,23 +33,26 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title' , 'tag_value', 'table', 'tag_table', 'active']
 
 
-class OrderItemListView(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='', read_only=True)
+class OrderItemListSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='order-item-detail', 
+                                               read_only=True
+                                            )
 
     class Meta:
         model = OrderItem
         fields = ['id', 'product_related', 'order_related', 
-                  'value', 'qty', 'tag_total_value', 'tag_value'
+                  'value', 'qty', 'tag_total_value', 'tag_value',
                   'tag_product_related', 'tag_order_related',
                   'url'
                   ]
 
-class OrderItemDetailView(serializers.ModelSerializer):
+
+class OrderItemDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
         fields = ['id', 'product_related', 'order_related', 
-                  'value', 'qty', 'tag_total_value', 'tag_value'
+                  'value', 'qty', 'tag_total_value', 'tag_value',
                   'tag_product_related', 'tag_order_related',
                   ]
 

@@ -26,3 +26,6 @@ class Product(models.Model):
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
+
+    def tag_category(self):
+        return f'{self.category.title}'

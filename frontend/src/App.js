@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import Homepage from './views/Homepage.js'
+import React from 'react';
+import { BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
+import Homepage from './views/Homepage.js';
+import Products from './views/Products.js';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
 
-  }
+class App extends React.Component{
 
-  render() {
+  render(){
+    return(
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/products/" component={Products} />
 
-    return (
-      <div className="App">
-          <Homepage />
-      </div>
-    );
+          <Route component={Homepage} />
+        </Switch>
+      </BrowserRouter>
+    )
   }
 }
+
 
 export default App;

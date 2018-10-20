@@ -1,3 +1,24 @@
 from rest_framework import serializers
+from products.models import Product, Category
 
-from ..models import Product, Category
+
+class ProductListSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='product-detail', read_only=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'value', 'category', 'tag_category', 'tag_value', 'url']
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'value', 'category', 'tag_category', 'tag_value']
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+
+     class Meta:
+         model = Category
+         fields = ['id', 'title']

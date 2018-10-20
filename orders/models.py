@@ -11,19 +11,20 @@ class Table(models.Model):
     value = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_free = models.BooleanField(default=True)
 
+
     def __str__(self):
         return f'{self.title}'
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
 
-
+    
 class Order(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
     title = models.CharField(blank=True, null=True, max_length=50)
     value = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    table = models.ForeignKey(Table, null=True, on_delete=models.SET_NULL)
+    table = models.ForeignKey(Table, null=True, on_delete=models.SET_NULL, related_name='table_orders')
 
     def __str__(self):
         return f'Table {self.table.title}' if self.table else 'Table'
@@ -34,6 +35,7 @@ class Order(models.Model):
             self.table.value = self.value
             self.table.save()
         super(Order, self).save(*args, **kwargs)
+
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
