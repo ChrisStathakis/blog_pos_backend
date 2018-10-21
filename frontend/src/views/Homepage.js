@@ -1,10 +1,11 @@
 import React from 'react';
+import { withRouter, Link} from 'react-router-dom';
 import { Container, Row, Col, CardText } from 'reactstrap'
 import MyNavbar from '../components/Navbar.js';
 import TableCart from '../components/TableCard.js'
 import fetchData from '../components/fetch_data'
 
-export default class Homepage extends React.Component {
+class Homepage extends React.Component {
   constructor(props) {
     super(props);
     this.handleNewOrder = this.handleNewOrder.bind(this);
@@ -17,21 +18,21 @@ export default class Homepage extends React.Component {
   }
 
   getTables() {
-    const endpoint = 'http://127.0.0.1:8000/api/table-list/'
+    const endpoint = 'http://127.0.0.1:8000/api/table-list/';
     const thisComp = this;
     let lookupOptions = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-    }
+    };
 
     fetch(endpoint, lookupOptions).then(
       function(response) {
         return response.json()
       }
     ).then(function(responseData){
-      console.log(responseData)
+      console.log(responseData);
       thisComp.setState({
         tables: responseData,
         doneLoading: true
@@ -40,8 +41,8 @@ export default class Homepage extends React.Component {
   }
 
   getTable = (id) => {
-    console.log('click getTable')
-    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`
+    console.log('click getTable');
+    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`;
     const thisComp = this;
     let lookupOptions = {
       method: 'GET',
@@ -62,7 +63,7 @@ export default class Homepage extends React.Component {
       })
     })
     
-  }
+  };
 
   handleNewOrder(id){
     this.getTable(id);
@@ -70,19 +71,19 @@ export default class Homepage extends React.Component {
   }
 
   newOrder = (id) => {
-    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`
+    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`;
     const thisComp = this;
-    console.log('current_data', this.state.table)
+    console.log('current_data', this.state.table);
     let data = this.state.table;
     
-    console.log('new_data', data)
+    console.log('new_data', data);
     let lookupOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    }
+    };
 
     fetch(endpoint, lookupOptions).then(
       function(response) {
@@ -91,23 +92,23 @@ export default class Homepage extends React.Component {
     ).then(function(responseData){
       thisComp.getTables()
     })
-  }
+  };
 
   componentDidMount(){
     this.getTables()
   }
 
   render() {
-    const doneLoading = this.state.doneLoading
-    const tables = this.state.tables
-    return (
-        <div>
-          <MyNavbar/>
-            <Container>
-              {doneLoading !== false ? <MyContainer tables={tables} newOrder={this.handleNewOrder} /> : <p>No data</p>}
-            </Container>
-        </div>
-    )
+      const doneLoading = this.state.doneLoading;
+      const tables = this.state.tables;
+      return (
+          <div>
+              <MyNavbar/>
+              <Container>
+                  {doneLoading !== false ? <MyContainer tables={tables} newOrder={this.handleNewOrder} /> : <p>No data</p>}
+                  </Container>
+          </div>
+      )
   }
 }
 
@@ -125,26 +126,27 @@ class MyContainer extends React.Component{
      
      return (
          <div>
-           <Row>
-             <Col xs="8">
-              <Row>
-                <h4 className='header'>Title</h4>
-              </Row>
-              <Row>
-                { tables.map((table, index)=>(
-                  <TableCart table={table} newOrder={this.props.newOrder} />
-                ))
-                }
-              </Row>
-            </Col>
+             <Row>
+                 <Col xs="8">
+                     <Row>
+                         <h4 className='header'>Title</h4>
+                     </Row>
+                     <Row>
+                         { tables.map((table, index)=>(
+                             <TableCart table={table} newOrder={this.props.newOrder} />
+                         ))
+                         }
+                         </Row>
+                 </Col>
 
-             <Col xs="4">
-                <FilterContainer />
-             </Col>
-           </Row>
+                 <Col xs="4">
+                     <FilterContainer />
+                 </Col>
+             </Row>
          </div>
      )
   }
 
 }
 
+export default withRouter(Homepage);

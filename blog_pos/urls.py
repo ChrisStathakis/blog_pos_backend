@@ -4,7 +4,7 @@ from django.urls import path
 from orders.api.views import (TableListAPIView, TableDetailAPIView,
                               OrderListAPIView, OrderDetailAPIView,  
                               OrderItemListAPIView, OrderItemDetailAPIView,
-                              APIhomepage
+                              ApiHomepage
                             )   
 
 from products.api.views import ProductListAPIView, ProductDetailAPIView, CategoryListApiView
@@ -12,11 +12,11 @@ from products.api.views import ProductListAPIView, ProductDetailAPIView, Categor
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/', APIhomepage),
+    path('api/', ApiHomepage),
     path('api/table-list/', TableListAPIView.as_view(), name='table_list'),
     path('api/table-detail/<int:pk>/', TableDetailAPIView.as_view(), name='table_detail'),
     path('api/order-list/', OrderListAPIView.as_view(), name='order_list'),
-    path('api/order-detail/<int:pk>/', OrderItemDetailAPIView.as_view(), name='order_detail'),
+    path('api/order-detail/<int:pk>/', OrderDetailAPIView.as_view(), name='order_detail'),
     path('api/order-item-list', OrderItemListAPIView.as_view(), name='order_item_list'),
     path('api/order-item-detail/<int:pk>/', OrderItemDetailAPIView.as_view(), name='order_item_detail'),
 

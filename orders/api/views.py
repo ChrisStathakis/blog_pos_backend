@@ -11,7 +11,7 @@ from ..models import Table, Order, OrderItem
 
 
 @api_view(['GET'])
-def APIhomepage(request, format=None):
+def ApiHomepage(request, format=None):
     return Response({
         'orders': reverse('order_list', request=request, format=format),
         'order-items': reverse('order_item_list', request=request, format=format),
@@ -20,7 +20,6 @@ def APIhomepage(request, format=None):
         'categories': reverse('category_list', request=request, format=format),
         
     })
-
 
 
 class TableListAPIView(generics.ListAPIView):
@@ -40,10 +39,13 @@ class OrderListAPIView(generics.ListCreateAPIView):
     permission_classes = (permissions.AllowAny, )
     queryset = Order.objects.all()
 
+
 class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = OrderDetailSerializer
-    permission_classes  = [permissions.AllowAny, ]
+    permission_classes = [permissions.AllowAny]
     queryset = Order.objects.all()
+    lookup_field = 'id'
+    lookup_url_kwarg = 'pk'
 
 
 class OrderItemListAPIView(generics.ListCreateAPIView):

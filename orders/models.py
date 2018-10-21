@@ -5,12 +5,13 @@ from django.conf import settings
 
 CURRENCY = settings.CURRENCY
 
+
 class Table(models.Model):
-    active  = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
     title = models.CharField(unique=True, max_length=150)
     value = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_free = models.BooleanField(default=True)
-
+    active_order_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.title}'
@@ -30,12 +31,12 @@ class Order(models.Model):
         return f'Table {self.table.title}' if self.table else 'Table'
 
     def save(self, *args, **kwargs):
-        self.value = self.order_items.all().aggregate(Sum('total_value'))['total_value__sum'] if self.order_items else 0
-        if self.active:
-            self.table.value = self.value
-            self.table.save()
+        self.value = self.order_items.all().aggregate(Sum('total_value'))['total_value__sum'] if self.order_items.all() else 0
+        self.value = self.value if self.value else 0
         super(Order, self).save(*args, **kwargs)
-
+        if self.active:
+            self.table.value = self.value if self.value else 0
+            self.table.save()
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
@@ -45,8 +46,8 @@ class Order(models.Model):
     
 
 class OrderItem(models.Model):
-    product_related = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    order_related = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product_related = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order_related = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     value = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     qty = models.PositiveIntegerField(default=1)
     total_value = models.DecimalField(decimal_places=2, max_digits=10, default=0)

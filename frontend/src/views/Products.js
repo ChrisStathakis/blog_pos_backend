@@ -15,14 +15,14 @@ class Products extends React.Component{
     }
 
     getProducts() {
-        const endpoint = 'http://127.0.0.1:8000/api/product-list/'
+        const endpoint = 'http://127.0.0.1:8000/api/product-list/';
         const thisComp = this;
         let lookUpOptions = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }   
-        }
+        };
         fetch(endpoint, lookUpOptions).then(
             function(response){
                 return response.json()
@@ -45,7 +45,7 @@ class Products extends React.Component{
             headers: {
                 'Content-Type': 'application/json'
             }   
-        }
+        };
         fetch(endpoint, lookUpOptions).then(
             function(response){
                 return response.json()
