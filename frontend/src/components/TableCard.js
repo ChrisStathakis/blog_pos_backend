@@ -15,8 +15,8 @@ export default class TableCard extends React.Component{
                     {table.is_free ?
                      <Button onClick={() => this.props.newOrder(table.id)} color='success'>New Order </Button>
                      : <Link to={{
-                         pathname: `/order/1/`
-                        }}><Button color='info'>Details </Button>
+                         pathname: `/order/${table.active_order_id}/`
+                        }}><Button color='info'>Details {table.active_order_id} </Button>
                         </Link>
                     }
                 </Card>

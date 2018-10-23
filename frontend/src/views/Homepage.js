@@ -71,12 +71,13 @@ class Homepage extends React.Component {
   }
 
   newOrder = (id) => {
-    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`;
+    const endpoint = `http://127.0.0.1:8000/api/order-list/`;
     const thisComp = this;
-    console.log('current_data', this.state.table);
-    let data = this.state.table;
-    
-    console.log('new_data', data);
+    const data = {
+      title: `Table ${id}`,
+      table: id,
+      active: true
+    }
     let lookupOptions = {
       method: 'POST',
       headers: {
@@ -90,7 +91,7 @@ class Homepage extends React.Component {
         return response.json()
       }
     ).then(function(responseData){
-      thisComp.getTables()
+      thisComp.componentDidMount()
     })
   };
 

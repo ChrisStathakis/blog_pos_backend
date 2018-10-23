@@ -7,7 +7,7 @@ class TableListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Table
-        fields = ['id', 'title', 'is_free', 'tag_value', 'url']
+        fields = ['id', 'title', 'is_free', 'tag_value', 'url', 'active_order_id']
     
 
 class TableDetailSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
 
 class OrderItemListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='order-item-detail', read_only=True)
+    url = serializers.HyperlinkedIdentityField(view_name='order_item_detail', read_only=True)
 
     class Meta:
         model = OrderItem

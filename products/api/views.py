@@ -1,5 +1,5 @@
 from django_filters.rest_framework import  DjangoFilterBackend
-from  rest_framework import generics, permissions , filters
+from rest_framework import generics, permissions , filters
 from products.models import Product, Category
 from .serializers import ProductListSerializer, ProductDetailSerializer, CategoryListSerializer
 

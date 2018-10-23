@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db.models import Sum
 from products.models import Product
 from django.conf import settings
@@ -18,6 +20,10 @@ class Table(models.Model):
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
+    
+    def active_order_id(self):
+        last_table = self.table_orders.filter(active=True).last()
+        return last_table.id if last_table else 'No Table'
 
     
 class Order(models.Model):
@@ -45,6 +51,13 @@ class Order(models.Model):
         return f'{self.table.title}'
     
 
+@receiver(post_save, sender=Order)
+def update_table_status(sender, instance, created, **kwargs):
+    if created:
+        instance.table.is_free = False
+        instance.table.save()
+
+
 class OrderItem(models.Model):
     product_related = models.ForeignKey(Product, on_delete=models.CASCADE)
     order_related = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
@@ -56,8 +69,8 @@ class OrderItem(models.Model):
         return f'{self.product_related.title}'
 
     def save(self, *args, **kwargs):
-        self.price = self.product_related.price
-        self.total_value = self.price * self.qty
+        self.price = self.product_related.value
+        self.total_value = self.value * self.qty
         super(OrderItem, self).save(*args, **kwargs)
         self.order_related.save()
 

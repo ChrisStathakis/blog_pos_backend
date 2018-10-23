@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, filters
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (TableListSerializer, TableDetailSerializer, 
                           OrderListSerializer, OrderDetailSerializer,
                           OrderItemListSerializer, OrderItemDetailSerializer
@@ -38,6 +39,7 @@ class OrderListAPIView(generics.ListCreateAPIView):
     serializer_class = OrderListSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = Order.objects.all()
+    
 
 
 class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
@@ -46,12 +48,16 @@ class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Order.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'pk'
+    
 
 
 class OrderItemListAPIView(generics.ListCreateAPIView):
     serializer_class = OrderItemListSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, ]
+    filter_fields = ['product_related', 'order_related', ]
+    search_fields = ['product_related__title', 'order_related__title']
 
 
 class OrderItemDetailAPIView(generics.RetrieveDestroyAPIView):
