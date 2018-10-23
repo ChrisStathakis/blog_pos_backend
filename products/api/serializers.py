@@ -3,7 +3,7 @@ from products.models import Product, Category
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='product-detail', read_only=True)
+    url = serializers.HyperlinkedIdentityField(view_name='product_detail', read_only=True)
 
     class Meta:
         model = Product

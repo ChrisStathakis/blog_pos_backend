@@ -10,6 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title', 'category__title']
 
 
-admin.register(Category)
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['active',]
+    list_display = ['id', 'title', 'active']

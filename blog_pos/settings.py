@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'django_filters',
 
     'frontend',
     'products',
@@ -131,3 +132,7 @@ STATIC_URL = '/static/'
 CURRENCY = '€'
 
 CORS_ORIGIN_ALLOW_ALL=True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}

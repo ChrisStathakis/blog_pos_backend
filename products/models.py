@@ -14,6 +14,9 @@ class Category(models.Model):
     active = models.BooleanField(default=True)
     title = models.CharField(unique=True, max_length=150)
 
+    def __str__(self):
+        return self.title
+
 
 class Product(models.Model):
     active = models.BooleanField(default=True)
