@@ -1,67 +1,88 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 
 class Filters extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            search: '',
-            selected_categories: []
+            categories: this.props.categories
         }
     }
 
-    validate = (filters) => {
-        let errors = {};
-        if (filters.search.length > 0 && filters.search.length <3){
-            errors.search='Too Short'
-        }
-        return errors
+    add_category = (value) => {
+        console.log('add', value)
     };
 
-    onformSubmit = (event) =>{
-        event.preventDefault();
-        const filters = this.state;
-        const fieldsErrors  = this.validate(filters);
-
-    }
-
-    onChangeCheckbox = (event) =>{
-        event.preventDefault();
-        this.setState({
-            selected_categories: [...this.state.selected_categories, event.target.value]
-        })
+    remove_category  = (value) => {
+        console.log('remove', value)
     };
+
 
     render() {
         const categories = this.props.categories;
-        console.log('props cate', categories);
+        console.log(this.state.checkedItems);
         return (
             <Form>
-                <FormGroup>
-                    <Label>Search</Label>
-                    <Input type="text" name='search' />
-                </FormGroup>
-
                 <h4>Filters</h4>
                 {categories.map((category, index)=>(
-                    <FormGroup check>
-                    <Label check>
-                        <Input onClick={this.onChangeCheckbox}
-                               type="checkbox"
-                               value={category.id}
-                        />
-                        {' '}
-                         {category.title}
-                    </Label>
-                </FormGroup>
+                    <CheckBoxComponent
+                        field={category}
+                        add_category={this.add_category}
+                        remove_category={this.remove_category}
+                    />
                 ))}
                 
                 <Button>Submit</Button>
             </Form>
         )
     }
+}
+
+class CheckBoxComponent extends React.Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isChecked:false
+        }
+    }
+
+    handleChecked = (evt) =>{
+        evt.preventDefault();
+        this.setState({isChecked: !this.state.isChecked});
+        this.handleChange()
+    };
+
+    handleChange = () => {
+        const value = this.props.value;
+        const isChecked = this.state.isChecked;
+        if (isChecked){
+           this.props.add_category(value)
+        }
+        else {
+            this.props.remove_category(value)
+        }
+    };
+
+    render(){
+        const field = this.props.field;
+        return(
+            <FormGroup check>
+                <Label check>
+                    <Input
+                        onClick={this.handleChecked}
+                        type="checkbox"
+                        checked={this.state.isChecked}
+                        value={field.id} />
+                    {' '}{field.title}
+                    </Label>
+            </FormGroup>
+        )
+    }
+
 }
 
 export default Filters;
