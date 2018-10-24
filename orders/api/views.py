@@ -62,3 +62,4 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = OrderItemDetailSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()
+   
