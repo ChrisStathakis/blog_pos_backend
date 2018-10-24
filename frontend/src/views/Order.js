@@ -6,7 +6,7 @@ import MyNavbar from '../components/Navbar.js';
 import ProductTable from '../components/ProductTable.js'
 import OrderDetail from '../components/OrderDetails.js'
 import Filters from '../components/Filters.js'
-import postData from '../components/fetch_data.js'
+import {postData, fetchData } from '../components/fetch_data.js'
 
 class Order extends React.Component{
 
@@ -17,6 +17,7 @@ class Order extends React.Component{
             categories: [],
             selected_categories: [],
             order_data: {},
+            order_items:[],
             order_id: '',
             doneLoading: false
         }
@@ -38,6 +39,12 @@ class Order extends React.Component{
                 })
             }
         )
+    }
+
+    getOrderItems(){
+        const endpoint = `http://127.0.0.1:8000/api/order-item-list?product_related=&order_related=${this.state.order_id}`;
+        const thisComp = this;
+        fetchData(endpoint, thisComp, 'order_items')
     }
 
     getProducts(){
@@ -104,7 +111,8 @@ class Order extends React.Component{
         const {id} = this.props.match.params;
         this.setState({
             order_id: id
-        })
+        });
+        this.getOrderItems();
         this.getCategories();
         this.getOrder(id);
         this.getProducts()
@@ -112,7 +120,7 @@ class Order extends React.Component{
 
     render() {
         const doneLoading = this.state.doneLoading;
-        const my_id = this.state.order_id
+        const my_id = this.state.order_id;
         return(
             <div>
                 <MyNavbar />
@@ -130,13 +138,12 @@ class Order extends React.Component{
                                          filterProducts={this.filterProducts}
                                 />
                                 <br />
-                                <OrderPart order_data={this.state.order_data} />
+                                {doneLoading ?<OrderPart order_data={this.state.order_data} order_items={this.state.order_items} /> :<p>No Data</p>}
                             </Col>
                         </Row>
                         :
                         <Col xs={12}><p>No data</p></Col>
                     }
-
                 </Container>
             </div>
         )
@@ -147,7 +154,7 @@ class Order extends React.Component{
 class ProductPart extends React.Component {
 
     addProduct = (id) => {
-        console.log('product id', id)
+        console.log('product id', id);
         const product_id = id;
         const thisComp = this;
         const order_id = this.props.my_id;
@@ -158,30 +165,36 @@ class ProductPart extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }
+        };
         fetch(endpoint, lookupOptions).then(
             function(response){
                 return response.json()
             }
         ).then(
             function(responseData){
-                const myResponse = responseData
+                const myResponse = responseData;
                 if (myResponse.length > 0){
-                    console.log('its here', myResponse)
+                    const data = {
+                        id: myResponse.id,
+                        product_related: product_id,
+                        order_related: order_id,
+                        qty: myResponse + 1,
+                        value: myResponse.value
+                    };
+                    postData('http://127.0.0.1:8000/api/order-item-list', data)
                 } else {
-                    console.log('New', myResponse)
                     const data = {
                         product_related: product_id,
                         order_related: order_id,
                         qty: 1,
 
-                    }
+                    };
+                    console.log('New', data);
                     postData('http://127.0.0.1:8000/api/order-item-list', data)
-                   
                 }
             }
         )
-    }
+    };
 
     render() {
         const products = this.props.products;
@@ -199,15 +212,12 @@ class OrderPart extends React.Component{
         return(
             <Card>
                 <CardHeader>Table {order_data.tag_table}</CardHeader>
-
-                        <CardTitle>
-                            Notes.. {order_data.title}
-                        </CardTitle>
-                        <CardText>Value.. {order_data.tag_value}</CardText>
-                        <button>{order_data.tag_status}</button>
-
-                <OrderDetail order_data={order_data} />
+                <CardTitle>Notes.. {order_data.title}</CardTitle>
+                <CardText>Value.. {order_data.tag_value}</CardText>
+                <button>{order_data.tag_status}</button>
+                <OrderDetail order_items={this.props.order_items} />
             </Card>
+
         )
     }
 }

@@ -69,7 +69,7 @@ class OrderItem(models.Model):
         return f'{self.product_related.title}'
 
     def save(self, *args, **kwargs):
-        self.price = self.product_related.value
+        self.value = self.product_related.value
         self.total_value = self.value * self.qty
         super(OrderItem, self).save(*args, **kwargs)
         self.order_related.save()

@@ -41,7 +41,6 @@ class OrderListAPIView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     
 
-
 class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = OrderDetailSerializer
     permission_classes = [permissions.AllowAny]
@@ -49,7 +48,6 @@ class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'pk'
     
-
 
 class OrderItemListAPIView(generics.ListCreateAPIView):
     serializer_class = OrderItemListSerializer
@@ -60,7 +58,7 @@ class OrderItemListAPIView(generics.ListCreateAPIView):
     search_fields = ['product_related__title', 'order_related__title']
 
 
-class OrderItemDetailAPIView(generics.RetrieveDestroyAPIView):
+class OrderItemDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = OrderItemDetailSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()
