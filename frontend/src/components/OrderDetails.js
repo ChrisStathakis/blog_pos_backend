@@ -11,11 +11,13 @@ export default class OrderDetails extends React.Component{
     handleCloseTable = () => {
         this.props.handleTableActions('CLOSE')
     };
+    handleBack = () => {
+        this.props.handleTableActions('BACK')
+    };
 
     render() {
         const { order_items } = this.props;
         const { order_data} = this.props;
-        console.log('render', order_items);
         return (
             <div>
             <Card>
@@ -35,7 +37,7 @@ export default class OrderDetails extends React.Component{
                     </thead>
                     <tbody>
                     {order_items.map((item, index)=>(
-                        <OrderItem item={item} addProduct={this.addProduct} changeQty={this.changeQty} />
+                        <OrderItem item={item} changeQty={this.changeQty} />
                     ))}
                     </tbody>
                 </Table>
@@ -44,7 +46,7 @@ export default class OrderDetails extends React.Component{
                     <CardHeader>Actions</CardHeader>
                     <CardTitle>
                         <Button color='primary' onClick={this.handleCloseTable}>Close Table</Button>
-                        <Button color='warning' onClick={this.changeQty}>Delete Table </Button>
+                        <Button color='warning' onClick={this.handleBack}>Back </Button>
                     </CardTitle>
                 </Card>
 

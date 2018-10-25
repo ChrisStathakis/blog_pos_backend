@@ -4,7 +4,7 @@ import { Table, Button } from 'reactstrap';
 export default class ProductTable extends React.Component{
 
     addProduct = (id) =>{
-       this.props.addProduct(id)
+       this.props.handleAddOrEditProduct(id)
     }
 
     render(){
