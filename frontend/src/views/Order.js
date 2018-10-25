@@ -1,11 +1,11 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Redirect} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap';
 import MyNavbar from '../components/Navbar.js';
 import ProductTable from '../components/ProductTable.js'
 import OrderDetails from '../components/OrderDetails.js'
 import Filters from '../components/Filters.js'
-import {postData, fetchData, postQtyChange } from '../components/fetch_data.js'
+import {postData, fetchData, postQtyChange, putData } from '../components/fetch_data.js'
 
 class Order extends React.Component{
 
@@ -29,7 +29,7 @@ class Order extends React.Component{
     }
 
     getOrderItems(){
-        const endpoint = `http://127.0.0.1:8000/api/order-item-list?product_related=&order_related=${this.state.order_id}`;
+        const endpoint = `http://127.0.0.1:8000/api/order-item-list?product_related=&order_related=${this.state.order_data.id}`;
         const thisComp = this;
         fetchData(endpoint, thisComp, 'order_items')
     }
@@ -43,16 +43,34 @@ class Order extends React.Component{
     getOrder(id){
         const endpoint = `http://127.0.0.1:8000/api/order-detail/${id}/`;
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'order_data')
+        fetchData(endpoint, thisComp, 'order_data');
         this.setState({
             doneLoading: true
         })
     }
 
     changeQty = (action, item_id) => {
-        postQtyChange(action, item_id)
+        postQtyChange(action, item_id);
         this.state.componentDidMount()
-    }
+    };
+
+    handleTableActions = (action) => {
+        const thisComp = this;
+        switch (action){
+            case 'CLOSE':
+                const order = this.state.order_data;
+                let data = {
+                    id: order.id,
+                    title: order.title,
+                    table: order.table,
+                    active: false,
+                };
+                console.log('post order data', data);
+                const endpoint = `http://127.0.0.1:8000/api/order-detail/${order.id}/`;
+                putData(endpoint, data,);
+                thisComp.props.history.push('/')
+        }
+    };
 
     filterProducts = (id) => {
         let categories = this.state.selected_categories;
@@ -70,19 +88,19 @@ class Order extends React.Component{
 
     componentDidMount(){
         const {id} = this.props.match.params;
-        this.setState({
-            order_id: id
-        });
         this.getOrderItems();
         this.getCategories();
         this.getProducts();
-        this.getOrder(id)  
+        this.getOrder(id) ;
+        this.setState({
+            order_id: this.state.order_data.id
+        })
     }
 
     render() {
         const doneLoading = this.state.doneLoading;
         const my_id = this.state.order_id;
-        console.log(this.state.order_items)
+        console.log(this.state.order_items);
         return(
             <div>
                 <MyNavbar />
@@ -103,6 +121,7 @@ class Order extends React.Component{
                                 {doneLoading ?<OrderDetails order_data={this.state.order_data} 
                                                             order_items={this.state.order_items} 
                                                             changeQty={this.changeQty}
+                                                            handleTableActions={this.handleTableActions}
                                                /> :<p>No Data</p>}
                             </Col>
                         </Row>

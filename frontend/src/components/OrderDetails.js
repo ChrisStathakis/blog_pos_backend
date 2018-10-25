@@ -1,18 +1,23 @@
 import React from 'react';
 import { Table,  Card, CardHeader,
-    CardTitle, CardText } from 'reactstrap'
+    CardTitle, CardText, Button } from 'reactstrap'
 
 export default class OrderDetails extends React.Component{
 
     changeQty = (action, item_id) => {
         this.props.changeQty(action, item_id)
-    }
+    };
+
+    handleCloseTable = () => {
+        this.props.handleTableActions('CLOSE')
+    };
 
     render() {
         const { order_items } = this.props;
         const { order_data} = this.props;
-        console.log('render', order_items)
+        console.log('render', order_items);
         return (
+            <div>
             <Card>
                 <CardHeader>Table {order_data.tag_table}</CardHeader>
                 <CardTitle>Notes.. {order_data.title}</CardTitle>
@@ -35,6 +40,16 @@ export default class OrderDetails extends React.Component{
                     </tbody>
                 </Table>
             </Card>
+                <Card>
+                    <CardHeader>Actions</CardHeader>
+                    <CardTitle>
+                        <Button color='primary' onClick={this.handleCloseTable}>Close Table</Button>
+                        <Button color='warning' onClick={this.changeQty}>Delete Table </Button>
+                    </CardTitle>
+                </Card>
+
+            </div>
+
         )
     }
 }

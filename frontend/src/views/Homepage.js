@@ -1,15 +1,15 @@
 import React from 'react';
-import { withRouter, Link} from 'react-router-dom';
+import { withRouter, Redirect} from 'react-router-dom';
 import { Container, Row, Col, CardText } from 'reactstrap'
 import MyNavbar from '../components/Navbar.js';
 import TableCart from '../components/TableCard.js'
 import fetchData from '../components/fetch_data'
 
 class Homepage extends React.Component {
+
   constructor(props) {
     super(props);
-    this.handleNewOrder = this.handleNewOrder.bind(this);
-    
+
     this.state = {
       tables: [],
       doneLoading: false,
@@ -49,26 +49,21 @@ class Homepage extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-    }
+    };
     
     fetch(endpoint, lookupOptions).then(
       function(response) {
-        console.log('works!')
+        console.log('works!');
         return response.json()
       }
     ).then(function(responseData){
-      console.log('update table', responseData)
+      console.log('update table', responseData);
       thisComp.setState({
         table: responseData,
       })
     })
     
   };
-
-  handleNewOrder(id){
-    this.getTable(id);
-    this.newOrder(id)
-  }
 
   newOrder = (id) => {
     const endpoint = `http://127.0.0.1:8000/api/order-list/`;
@@ -77,7 +72,7 @@ class Homepage extends React.Component {
       title: `Table ${id}`,
       table: id,
       active: true
-    }
+    };
     let lookupOptions = {
       method: 'POST',
       headers: {
@@ -91,7 +86,7 @@ class Homepage extends React.Component {
         return response.json()
       }
     ).then(function(responseData){
-      thisComp.componentDidMount()
+        return <Redirect to={`/order/${responseData.id}/`} />
     })
   };
 
@@ -106,7 +101,7 @@ class Homepage extends React.Component {
           <div>
               <MyNavbar/>
               <Container>
-                  {doneLoading !== false ? <MyContainer tables={tables} newOrder={this.handleNewOrder} /> : <p>No data</p>}
+                  {doneLoading !== false ? <MyContainer tables={tables} newOrder={this.newOrder} /> : <p>No data</p>}
                   </Container>
           </div>
       )

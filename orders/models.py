@@ -15,13 +15,20 @@ class Table(models.Model):
     is_free = models.BooleanField(default=True)
     active_order_id = models.PositiveIntegerField(blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        self.active_order_id = self.table_orders.filter(active=True).last().id\
+            if self.table_orders.filter(active=True).exists() else None
+        self.is_free = False if self.active_order_id else True
+        self.value = 0 if self.is_free else self.value
+        super(Table, self).save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.title}'
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
     
-    def active_order_id(self):
+    def tag_active_order_id(self):
         last_table = self.table_orders.filter(active=True).last()
         return last_table.id if last_table else 'No Table'
 
@@ -40,15 +47,14 @@ class Order(models.Model):
         self.value = self.order_items.all().aggregate(Sum('total_value'))['total_value__sum'] if self.order_items.all() else 0
         self.value = self.value if self.value else 0
         super(Order, self).save(*args, **kwargs)
-        if self.active:
-            self.table.value = self.value if self.value else 0
-            self.table.save()
+        self.table.value = self.value if self.value and self.active else 0
+        self.table.save()
 
     def tag_value(self):
         return f'{self.value} {CURRENCY}'
 
     def tag_table(self):
-        return f'{self.table.title}'
+        return f'{self.table.title}' if self.table else 'No table'
     
 
 @receiver(post_save, sender=Order)

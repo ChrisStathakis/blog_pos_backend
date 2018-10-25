@@ -18,6 +18,25 @@ function postData(endpoint, data) {
     )
 }
 
+function putData(endpoint, data) {
+    let lookupOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(endpoint, lookupOptions).then(
+        function(response) {
+            return response.json()
+        }
+    ).then(
+        function(responseData) {
+            console.log(responseData)
+        }
+    )
+}
+
 function fetchData(endpoint, thisComp, state) {
     let lookupOptions = {
         method: "GET",
@@ -34,6 +53,7 @@ function fetchData(endpoint, thisComp, state) {
             thisComp.setState({
                 [state]: responseData
             })
+
         }
     )
 }
@@ -43,7 +63,7 @@ function fetchData(endpoint, thisComp, state) {
 function postQtyChange(action, id) {
     let item;
     let data;
-    const endpoint = `http://127.0.0.1:8000/api/order-item-detail/${id}/`
+    const endpoint = `http://127.0.0.1:8000/api/order-item-detail/${id}/`;
     switch (action){
         case 'add':
             let lookupOptionsGET = {
@@ -51,21 +71,21 @@ function postQtyChange(action, id) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
+            };
             fetch(endpoint, lookupOptionsGET).then(
                 function(response) {
                     return response.json()
                 }
             ).then(
                 function(responseData) {
-                    item = responseData
+                    item = responseData;
                     data = {
                         id: item.id,
                         product_related: item.product_related,
                         order_related: item.order_related,
                         qty: item.qty + 1
-                    }
-                    console.log('get data from', data)
+                    };
+                    console.log('get data from', data);
                     let lookupOptionsPOST = {
                         method: 'POST',
                         headers: {
@@ -131,4 +151,4 @@ function postQtyChange(action, id) {
 }
 
 
-export  {fetchData, postData, postQtyChange}
+export  {fetchData, postData, postQtyChange, putData}
