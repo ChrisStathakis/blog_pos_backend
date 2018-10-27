@@ -59,15 +59,15 @@ export default class OrderDetails extends React.Component{
 class OrderItem extends React.Component{
 
     addQty = () => {
-        this.props.changeQty('add', this.props.item.id)
+        this.props.changeQty('ADD', this.props.item.id)
     }
 
     removeQty = () => {
-        this.props.changeQty('remove', this.props.item.id)
+        this.props.changeQty('REMOVE', this.props.item.id)
     }
 
-    deleteItem = () => {
-        this.props.changeQty('delete', this.props.item.id)
+    handleDeleteItem = () => {
+        this.props.changeQty('DELETE', this.props.item.id)
     }
 
     render(){
@@ -80,7 +80,7 @@ class OrderItem extends React.Component{
                 <td>
                     <button onClick={this.addQty} className="btn btn-success"><i className="fa fa-angle-up" /></button>
                     <button onClick={this.removeQty} className="btn btn-warning"><i className="fa fa-angle-down" /></button>
-                    <button onClick={this.deleteItem} className="btn btn-danger"><i className="fa fa-trash-alt" /></button>
+                    <button onClick={this.handleDeleteItem} className="btn btn-danger"><i className="fa fa-trash-alt" /></button>
                     </td>
             </tr>
         )

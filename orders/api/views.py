@@ -58,7 +58,7 @@ class OrderItemListAPIView(generics.ListCreateAPIView):
     search_fields = ['product_related__title', 'order_related__title']
 
 
-class OrderItemDetailAPIView(generics.RetrieveUpdateAPIView):
+class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderItemDetailSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()

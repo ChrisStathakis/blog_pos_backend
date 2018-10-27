@@ -12,8 +12,6 @@ class Order extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            products: [],
-            categories: [],
             selected_categories: [],
             order_data: '',
             order_items:[],
@@ -28,11 +26,7 @@ class Order extends React.Component{
         fetchData(endpoint, thisComp, 'order_items')
     }
 
-    getProducts(){
-        const endpoint = 'http://127.0.0.1:8000/api/product-list/';
-        const thisComp = this;
-        fetchData(endpoint, thisComp, 'products')
-    }
+    
 
     getOrder(id){
         const endpoint = `http://127.0.0.1:8000/api/order-detail/${id}/`;
@@ -70,23 +64,9 @@ class Order extends React.Component{
         }
     };
 
-    filterProducts = (id) => {
-        let categories = this.state.selected_categories;
-        if (categories.indexOf(id)> -1 ){
-            this.setState({
-                selected_categories: this.state.selected_categories.filter((i) => i !== id)
-            })
-        } else{
-            this.setState({
-                selected_categories: categories.concat(id)
-            })
-        }
-
-    };
-
+    
     componentDidMount(){
         const {id} = this.props.match.params;
-        this.getProducts();
         this.getOrder(id) ;
         this.getOrderItems(id);
         this.setState({
@@ -105,8 +85,9 @@ class Order extends React.Component{
                         <Row>
                             <Col xs="6">
                                 <h4 className='header'>Products</h4>
-                                {doneLoading ? <ProductGrid products={this.state.products}
-                                                             handleAddOrEditProduct={this.handleAddOrEditProduct}                                                             
+                                {doneLoading ? <ProductGrid 
+                                                    handleAddOrEditProduct={this.handleAddOrEditProduct}
+                                                    handleSelectedCategories={this.handleSelectedCategories}                                                             
                                                 /> 
                                 : <p>No data</p>
                                 }
@@ -118,10 +99,11 @@ class Order extends React.Component{
                                          filterProducts={this.filterProducts}
                                 />
                                 <br />
-                                {doneLoading ?<OrderDetails order_data={this.state.order_data} 
-                                                            order_items={this.state.order_items} 
-                                                            changeQty={this.changeQty}
-                                                            handleTableActions={this.handleTableActions}
+                                {doneLoading ?<OrderDetails 
+                                                    order_data={this.state.order_data} 
+                                                    order_items={this.state.order_items} 
+                                                    changeQty={this.changeQty}
+                                                    handleTableActions={this.handleTableActions}
                                                /> :<p>No Data</p>}
                             </Col>
                         </Row>

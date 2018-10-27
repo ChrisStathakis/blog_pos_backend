@@ -22,4 +22,4 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 class CategoryListApiView(generics.ListAPIView):
     serializer_class = CategoryListSerializer
     permission_classes = (permissions.AllowAny, )
-    queryset = Product.objects.filter(active=True)
+    queryset = Category.objects.filter(active=True)

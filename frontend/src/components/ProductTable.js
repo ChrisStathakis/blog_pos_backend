@@ -8,15 +8,29 @@ export default class ProductGrid extends React.Component{
         super(props);
         this.state = {
             toggleForm: false,
+            products: [],
             categories: [],
-            selected_categories:[]
+            doneLoading: false
         }
     }
 
     getCategories(){
         const endpoint = 'http://127.0.0.1:8000/api/category-list/';
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'categories' )
+        fetchData(endpoint, thisComp, 'categories')
+    }
+
+    getProducts(endpoint){
+        const thisComp = this;
+        fetchData(endpoint, thisComp, 'products')
+    }
+
+    handleSelectedCategories = (categories_list) =>{
+        if (categories_list){
+            const endpoint = 'http://127.0.0.1:8000/api/product-list/'+ '?category='+ categories_list;
+            console.log(endpoint)
+            this.getProducts(endpoint)  
+        }
     }
 
     handleToggleForm = (e) => {
@@ -27,23 +41,40 @@ export default class ProductGrid extends React.Component{
     };
 
     componentDidMount(){
-        this.getCategories()
+        const endpoint = 'http://127.0.0.1:8000/api/product-list/';
+        this.getCategories();
+        this.getProducts(endpoint);
+        this.setState({
+            doneLoading: true
+        })
     }
-
+    
     render(){
-        if(this.state.toggleForm){
+        const { doneLoading } = this.state;
+        const {categories} = this.state;
+        console.log(categories)
+        if(this.state.toggleForm && categories.length > 0){
             return(
                 <div>
                     <Button color='primary'onClick={this.handleToggleForm}>Close</Button>
-                    <Filters categories={this.state.categories} />
+                    <Filters 
+                        categories={categories}
+                        handleSelectedCategories={this.handleSelectedCategories}
+                        />
                 </div>
             )
         } else {
             return(
                 <div>
-                    <Button color='primary'onClick={this.handleToggleForm}>Filters</Button>
-                    <ProductTable products={this.props.products}
-                                  handleAddOrEditProduct={this.props.handleAddOrEditProduct}
+                    <Button 
+                        color='primary'
+                        onClick={this.handleToggleForm}
+                        >Filters
+                    </Button>
+
+                    <ProductTable 
+                        products={this.state.products}
+                        handleAddOrEditProduct={this.props.handleAddOrEditProduct}
                     />
                 </div>
             )

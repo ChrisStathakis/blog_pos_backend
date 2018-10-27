@@ -67,7 +67,7 @@ function postQtyChange(action, id, thisComp) {
     let data;
     const endpoint = `http://127.0.0.1:8000/api/order-item-detail/${id}/`;
     switch (action){
-        case 'add':
+        case 'ADD':
             let lookupOptionsGET = {
                 method: 'GET',
                 headers: {
@@ -106,7 +106,7 @@ function postQtyChange(action, id, thisComp) {
                 }
             )
             break;
-        case 'remove':
+        case 'REMOVE':
             let lookupOptionsGET_ = {
                 method: 'GET',
                 headers: {
@@ -146,6 +146,18 @@ function postQtyChange(action, id, thisComp) {
                 }
             )
             break;
+        case 'DELETE':
+            let lookupOptionsDEL = {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            fetch(endpoint, lookupOptionsDEL).then(
+                function(){
+                    thisComp.componentDidMount()
+                }
+            )
         default:
             thisComp.componentDidMount()
     }

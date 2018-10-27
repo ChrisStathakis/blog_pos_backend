@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
 from products.models import Product
@@ -91,3 +91,8 @@ class OrderItem(models.Model):
 
     def tag_product_related(self):
         return f'{self.product_related.title}'
+
+
+@receiver(post_delete, sender=OrderItem)
+def update_order(sender, instance, *args, **kwargs):
+    instance.order_related.save()
