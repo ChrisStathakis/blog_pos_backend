@@ -2,7 +2,7 @@ import React from 'react';
 import {withRouter, Redirect} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap';
 import MyNavbar from '../components/Navbar.js';
-import ProductTable from '../components/ProductTable.js'
+import ProductGrid from '../components/ProductTable.js'
 import OrderDetails from '../components/OrderDetails.js'
 import Filters from '../components/Filters.js'
 import {postData, fetchData, postQtyChange, putData, addOrEditProduct } from '../components/fetch_data.js'
@@ -20,12 +20,6 @@ class Order extends React.Component{
             order_id: '',
             doneLoading: false
         }
-    }
-
-    getCategories(){
-        const endpoint = 'http://127.0.0.1:8000/api/category-list/';
-        const thisComp = this;
-        fetchData(endpoint, thisComp, 'categories' )
     }
 
     getOrderItems(id){
@@ -92,7 +86,6 @@ class Order extends React.Component{
 
     componentDidMount(){
         const {id} = this.props.match.params;
-        this.getCategories();
         this.getProducts();
         this.getOrder(id) ;
         this.getOrderItems(id);
@@ -112,7 +105,7 @@ class Order extends React.Component{
                         <Row>
                             <Col xs="6">
                                 <h4 className='header'>Products</h4>
-                                {doneLoading ? <ProductTable products={this.state.products} 
+                                {doneLoading ? <ProductGrid products={this.state.products}
                                                              handleAddOrEditProduct={this.handleAddOrEditProduct}                                                             
                                                 /> 
                                 : <p>No data</p>

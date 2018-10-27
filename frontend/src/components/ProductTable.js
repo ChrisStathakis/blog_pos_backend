@@ -1,7 +1,57 @@
 import React from 'react';
 import { Table, Button } from 'reactstrap';
+import Filters from './Filters.js'
+import {fetchData} from "./fetch_data";
 
-export default class ProductTable extends React.Component{
+export default class ProductGrid extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            toggleForm: false,
+            categories: [],
+            selected_categories:[]
+        }
+    }
+
+    getCategories(){
+        const endpoint = 'http://127.0.0.1:8000/api/category-list/';
+        const thisComp = this;
+        fetchData(endpoint, thisComp, 'categories' )
+    }
+
+    handleToggleForm = (e) => {
+        e.preventDefault();
+        this.setState({
+            toggleForm: !this.state.toggleForm
+        })
+    };
+
+    componentDidMount(){
+        this.getCategories()
+    }
+
+    render(){
+        if(this.state.toggleForm){
+            return(
+                <div>
+                    <Button color='primary'onClick={this.handleToggleForm}>Close</Button>
+                    <Filters categories={this.state.categories} />
+                </div>
+            )
+        } else {
+            return(
+                <div>
+                    <Button color='primary'onClick={this.handleToggleForm}>Filters</Button>
+                    <ProductTable products={this.props.products}
+                                  handleAddOrEditProduct={this.props.handleAddOrEditProduct}
+                    />
+                </div>
+            )
+        }
+    }
+}
+
+class ProductTable extends React.Component{
 
     addProduct = (id) =>{
        this.props.handleAddOrEditProduct(id)

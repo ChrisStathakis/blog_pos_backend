@@ -12,13 +12,9 @@ class Filters extends React.Component {
         }
     }
 
-    add_category = (value) => {
-        console.log('add', value)
-    };
+    handleCheckBoxInput = () => {
 
-    remove_category  = (value) => {
-        console.log('remove', value)
-    };
+    }
 
 
     render() {
@@ -30,8 +26,7 @@ class Filters extends React.Component {
                 {categories.map((category, index)=>(
                     <CheckBoxComponent
                         field={category}
-                        add_category={this.add_category}
-                        remove_category={this.remove_category}
+                        handleCheckboxInput={this.handleCheckboxInput}
                     />
                 ))}
                 
@@ -46,25 +41,15 @@ class CheckBoxComponent extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            isChecked:false
+            isChecked: false
         }
     }
 
-    handleChecked = (evt) =>{
-        evt.preventDefault();
-        this.setState({isChecked: !this.state.isChecked});
-        this.handleChange()
-    };
-
-    handleChange = () => {
-        const value = this.props.value;
-        const isChecked = this.state.isChecked;
-        if (isChecked){
-           this.props.add_category(value)
-        }
-        else {
-            this.props.remove_category(value)
-        }
+    handleChange = (e) => {
+        e.preventDefault();
+        this.setState({
+            isChecked: !this.state.isChecked
+        })
     };
 
     render(){
@@ -73,10 +58,10 @@ class CheckBoxComponent extends React.Component{
             <FormGroup check>
                 <Label check>
                     <Input
-                        onClick={this.handleChecked}
+                        onClick={this.handleChange}
                         type="checkbox"
                         checked={this.state.isChecked}
-                        value={field.id} />
+                         />
                     {' '}{field.title}
                     </Label>
             </FormGroup>
