@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Redirect} from 'react-router-dom';
-import { Container, Row, Col, CardText } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap'
 import MyNavbar from '../components/Navbar.js';
 import TableCart from '../components/TableCard.js'
 import {fetchData} from '../helpers/fetch_data.js'

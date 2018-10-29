@@ -4,9 +4,8 @@ import {Container, Row, Col} from 'reactstrap';
 import {fetchData } from '../helpers/fetch_data.js'
 import {withRouter} from "react-router-dom";
 import ReportGrid from '../components/ReportGrid.js'
-import Filters from '../components/Filters.js'
 import ReportTotalData from "../components/ReportTotalData";
-
+import {ORDER_ITEMS_ENDPOINT, TABLES_ENDPOINT} from "../helpers/endpoints";
 
 class Report extends React.Component {
 
@@ -29,7 +28,7 @@ class Report extends React.Component {
     }
 
     getTables(){
-        const endpoint = 'http://127.0.0.1:8000/api/table-list/';
+        const endpoint = TABLES_ENDPOINT;
         const thisComp = this;
         fetchData(endpoint, thisComp, 'tables')
     }
@@ -41,7 +40,7 @@ class Report extends React.Component {
 
     handleSelectedCategories = (selectedCategories) =>{
         if(selectedCategories){
-            const endpoint = 'http://127.0.0.1:8000/api/order-list/' + '?table=' + selectedCategories;
+            const endpoint = ORDER_ITEMS_ENDPOINT + '?table=' + selectedCategories;
             this.getOrders(endpoint)
         }
     };

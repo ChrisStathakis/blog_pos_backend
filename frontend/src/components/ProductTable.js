@@ -72,9 +72,7 @@ export default class ProductGrid extends React.Component{
     }
     
     render(){
-        const { doneLoading } = this.state;
         const {categories} = this.state;
-        console.log(categories);
         if(this.state.toggleForm && categories.length > 0){
             return(
                 <div>

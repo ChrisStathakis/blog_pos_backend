@@ -1,10 +1,14 @@
 import React from 'react';
 import MyNavbar from '../components/Navbar.js';
-import { Row, Col, Table } from 'reactstrap';
-import ProductTable from'../components/ProductTable.js'
-import Filters from '../components/Filters.js';
+import { Row, Col } from 'reactstrap';
+import ProductTable from '../components/ProductTable.js'
+import ProductForm from  '../components/ProductForm.js';
+import {PRODUCTS_ENDPOINT, CATEGORYS_ENDPOINT} from "../helpers/endpoints";
+import {fetchData} from "../helpers/fetch_data";
+
 
 class Products extends React.Component{
+
     constructor(props) {
         super(props);
         this.state = {
@@ -15,7 +19,7 @@ class Products extends React.Component{
     }
 
     getProducts() {
-        const endpoint = 'http://127.0.0.1:8000/api/product-list/';
+        const endpoint = PRODUCTS_ENDPOINT;
         const thisComp = this;
         let lookUpOptions = {
             method: 'GET',
@@ -38,25 +42,9 @@ class Products extends React.Component{
     }
 
     getCategories(){
-        const endpoint = 'http://127.0.0.1:8000/api/category-list/';
+        const endpoint = CATEGORYS_ENDPOINT;
         const thisComp = this;
-        let lookUpOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }   
-        };
-        fetch(endpoint, lookUpOptions).then(
-            function(response){
-                return response.json()
-            }
-        ).then(
-            function(responseData){
-                thisComp.setState({
-                    categories: responseData
-                })
-            }
-        )
+        fetchData(endpoint, thisComp, 'categories');
     }
     
     componentDidMount(){
@@ -66,9 +54,7 @@ class Products extends React.Component{
 
     render() {
         const {products} = this.state;
-        const {categories} = this.state;
         const {doneLoading} = this.state;
-
         return (
             <div>
                 <MyNavbar/>
@@ -78,7 +64,7 @@ class Products extends React.Component{
                         {doneLoading ? <ProductTable products={products} />:<p>No data</p>}
                     </Col>
                     <Col xs='4'>
-                        {doneLoading ? <Filters categories={categories} />: <p>No data</p>}
+                        <ProductForm />
                     </Col>
                 </Row>
           </div>

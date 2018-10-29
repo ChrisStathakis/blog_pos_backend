@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withRouter, Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap';
 import MyNavbar from '../components/Navbar.js';
 import ProductGrid from '../components/ProductTable.js'
 import OrderDetails from '../components/OrderDetails.js'
 import {fetchData, postQtyChange, putData, addOrEditProduct } from '../helpers/fetch_data.js'
-import {PRODUCTS_ENDPOINT, ORDER_ITEMS_ENDPOINT, ORDER_ENDPOINT} from '../helpers/endpoints.js'
+import {ORDER_ITEMS_ENDPOINT, ORDER_ENDPOINT} from '../helpers/endpoints.js'
 
 
 class Order extends React.Component{
@@ -67,7 +67,10 @@ class Order extends React.Component{
                     active: false,
                 };
                 const endpoint = ORDER_ENDPOINT + order.id + '/';
-                putData(endpoint, data,)
+                putData(endpoint, data,);
+                break;
+            default:
+                console.log('oups!')
         }
         thisComp.props.history.push('/')
     };

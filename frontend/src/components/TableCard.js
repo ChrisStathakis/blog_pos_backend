@@ -5,8 +5,11 @@ import { Col, Card, CardTitle, CardText, Button } from 'reactstrap'
 
 export default class TableCard extends React.Component{
 
-    handleNewOrder = () => {
+    static propTypes = {
+        table: PropTypes.object
+    };
 
+    handleNewOrder = () => {
         this.props.newOrder(this.props.table.id)
     };
 

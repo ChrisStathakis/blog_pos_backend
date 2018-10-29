@@ -105,7 +105,7 @@ function postQtyChange(action, id, thisComp) {
                         }
                     )
                 }
-            )
+            );
             break;
         case 'REMOVE':
             let lookupOptionsGET_ = {
@@ -113,20 +113,20 @@ function postQtyChange(action, id, thisComp) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
+            };
             fetch(endpoint, lookupOptionsGET_).then(
                 function(response) {
                     return response.json()
                 }
             ).then(
                 function(responseData) {
-                    item = responseData
+                    item = responseData;
                     data = {
                         id: item.id,
                         product_related: item.product_related,
                         order_related: item.order_related,
-                        qty: parseInt(item.qty) - 1
-                    }
+                        qty: item.qty - 1
+                    };
                     let lookupOptionsPOST = {
                         method: 'PUT',
                         headers: {
@@ -134,7 +134,7 @@ function postQtyChange(action, id, thisComp) {
                         },
                         body: JSON.stringify(data)
                 
-                    }
+                    };
                     fetch(endpoint, lookupOptionsPOST).then(
                         function(response){
                             return response.json()
@@ -145,7 +145,7 @@ function postQtyChange(action, id, thisComp) {
                         }
                     )
                 }
-            )
+            );
             break;
         case 'DELETE':
             let lookupOptionsDEL = {
@@ -153,12 +153,13 @@ function postQtyChange(action, id, thisComp) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
+            };
             fetch(endpoint, lookupOptionsDEL).then(
                 function(){
                     thisComp.componentDidMount()
                 }
-            )
+            );
+            break;
         default:
             thisComp.componentDidMount()
     }

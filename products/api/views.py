@@ -4,7 +4,7 @@ from products.models import Product, Category
 from .serializers import ProductListSerializer, ProductDetailSerializer, CategoryListSerializer
 
 
-class ProductListAPIView(generics.ListAPIView):
+class ProductListAPIView(generics.ListCreateAPIView):
     serializer_class = ProductListSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = Product.objects.filter(active=True)
