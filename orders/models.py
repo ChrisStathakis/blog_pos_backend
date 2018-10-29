@@ -40,11 +40,15 @@ class Order(models.Model):
     value = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     table = models.ForeignKey(Table, null=True, on_delete=models.SET_NULL, related_name='table_orders')
 
+    class Meta:
+        ordering = ['-timestamp', ]
+
     def __str__(self):
         return f'Table {self.table.title}' if self.table else 'Table'
 
     def save(self, *args, **kwargs):
-        self.value = self.order_items.all().aggregate(Sum('total_value'))['total_value__sum'] if self.order_items.all() else 0
+        self.value = self.order_items.all().aggregate(Sum('total_value'))['total_value__sum'] if \
+            self.order_items.all() else 0
         self.value = self.value if self.value else 0
         super(Order, self).save(*args, **kwargs)
         self.table.value = self.value if self.value and self.active else 0
@@ -55,6 +59,12 @@ class Order(models.Model):
 
     def tag_table(self):
         return f'{self.table.title}' if self.table else 'No table'
+
+    def tag_active(self):
+        return 'Closed' if not self.active else 'Active'
+
+    def tag_timestamp(self):
+        return self.timestamp.date()
     
 
 @receiver(post_save, sender=Order)
@@ -84,7 +94,7 @@ class OrderItem(models.Model):
         return f'{self.value} {CURRENCY}'
 
     def tag_total_value(self):
-        return f'{self.value} {CURRENCY}'
+        return f'{self.total_value} {CURRENCY}'
 
     def tag_order_related(self):
         return f'{self.order_related.__str__}'

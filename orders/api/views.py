@@ -39,6 +39,8 @@ class OrderListAPIView(generics.ListCreateAPIView):
     serializer_class = OrderListSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = Order.objects.all()
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = ('table', )
     
 
 class OrderDetailAPIView(generics.RetrieveUpdateAPIView):
@@ -62,4 +64,4 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderItemDetailSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()
-   
+

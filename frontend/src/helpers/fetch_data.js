@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
+
 function postData(endpoint, data) {
     let lookupOptions = {
         method: 'POST',
@@ -34,7 +35,7 @@ function putData(endpoint, data) {
         }
     ).then(
         function(responseData) {
-            console.log('almost redirect!')
+            console.log('almost redirect!');
             return <Redirect to='/' />;
         }
     )
@@ -200,19 +201,19 @@ function addOrEditProduct(order_id, product_id, thisComp) {
                 }
             ).then(function(responseData){thisComp.componentDidMount()})
         } else {
-            console.log('new product')
+            console.log('new product');
             const data_ = {
                 product_related: product_id,
                 order_related: order_id,
                 qty: 1
-            }
+            };
             let lookupOptionsPOST = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data_)
-            }
+            };
             fetch('http://127.0.0.1:8000/api/order-item-list', lookupOptionsPOST).then(
                 function(response){
                     return response.json()
@@ -224,4 +225,4 @@ function addOrEditProduct(order_id, product_id, thisComp) {
     })
 }
 
-export  {fetchData, postData, postQtyChange, putData, addOrEditProduct}
+export {fetchData, postData, postQtyChange, putData, addOrEditProduct}

@@ -9,46 +9,40 @@ class Filters extends React.Component {
         super(props);
         this.state = {
             categories: this.props.categories||[],
-            selected_categories: []
+            selected_categories: ''
         }
     }
+
+    static contextTypes = {
+        clearFilters: PropTypes.func
+    };
 
     handleClear = () => {
         this.setState({
-            selected_categories: []
-        })
-        this.props.handleSelectedCategories
-    }
+            selected_categories: ''
+        });
+        this.context.clearFilters()
 
-    handleSelectedCategories = (checked, id) => {
-        if(checked){
-            let selected_categories = this.state.selected_categories.concat(id)
-            this.setState({
-                selected_categories: selected_categories
-                
-            })
-            this.props.handleSelectedCategories(selected_categories)
-        } else {
-            let selected_categories = this.state.selected_categories.filter(function(item){
-                return item !== id
-            })
-            this.setState({
-                selected_categories: selected_categories
-            })
-            this.props.handleSelectedCategories(selected_categories)
-        }
-        
-    }
+    };
+
+
+    handleSelectedCategories = (id) => {
+        this.setState({
+            selected_categories: id
+        });
+        this.props.handleSelectedCategories(id);
+        console.log(this.state);
+    };
 
     render() {
         const categories = this.state.categories;
         return (
             <Form>
-                <h4>Filters</h4>
                 {categories.map((category, index)=>(
                     <CheckBoxComponent
                         field={category}
                         handleSelectedCategories={this.handleSelectedCategories}
+                        checked={category.id === this.state.selected_categories ? true: false}
                     />
                 ))}
                 
@@ -60,19 +54,8 @@ class Filters extends React.Component {
 
 class CheckBoxComponent extends React.Component{
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isChecked: false
-        }
-    }
-
     handleChange = (e) => {
-        const checked = e.target.checked
-        this.setState({
-            isChecked: !this.state.isChecked
-        })
-        this.props.handleSelectedCategories(checked, this.props.field.id)
+        this.props.handleSelectedCategories(this.props.field.id)
     };
 
     render(){
@@ -81,12 +64,11 @@ class CheckBoxComponent extends React.Component{
             <FormGroup check>
                 <label>{field.title}</label>
                 <input 
-                    type='radio' 
+                    type='radio'
                     className='form-control' 
-                    checked={this.state.isChecked}
+                    checked={this.props.checked}
                     onClick={this.handleChange}
                  />
-                    
             </FormGroup>
         )
     }

@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Table, Button } from 'reactstrap';
 import Filters from './Filters.js'
-import {fetchData} from "./fetch_data";
+import {fetchData} from "../helpers/fetch_data";
+import {CATEGORYS_ENDPOINT, PRODUCTS_ENDPOINT} from "../helpers/endpoints";
+
 
 export default class ProductGrid extends React.Component{
+
     constructor(props){
         super(props);
         this.state = {
@@ -14,8 +18,18 @@ export default class ProductGrid extends React.Component{
         }
     }
 
+    static childContextTypes = {
+        clearFilters: PropTypes.func,
+    };
+
+    getChildContext(){
+        return{
+            clearFilters: this.handleClearFilters,
+        }
+    }
+
     getCategories(){
-        const endpoint = 'http://127.0.0.1:8000/api/category-list/';
+        const endpoint = CATEGORYS_ENDPOINT;
         const thisComp = this;
         fetchData(endpoint, thisComp, 'categories')
     }
@@ -27,11 +41,11 @@ export default class ProductGrid extends React.Component{
 
     handleSelectedCategories = (categories_list) =>{
         if (categories_list){
-            const endpoint = 'http://127.0.0.1:8000/api/product-list/'+ '?category='+ categories_list;
-            console.log(endpoint)
+            const endpoint = PRODUCTS_ENDPOINT + '?category='+ categories_list;
+            console.log(endpoint);
             this.getProducts(endpoint)  
         }
-    }
+    };
 
     handleToggleForm = (e) => {
         e.preventDefault();
@@ -40,8 +54,16 @@ export default class ProductGrid extends React.Component{
         })
     };
 
+    handleClearFilters = () => {
+        const endpoint = PRODUCTS_ENDPOINT;
+        this.setState({
+            toggleForm: false
+        });
+        this.getProducts(endpoint)
+    };
+
     componentDidMount(){
-        const endpoint = 'http://127.0.0.1:8000/api/product-list/';
+        const endpoint = PRODUCTS_ENDPOINT;
         this.getCategories();
         this.getProducts(endpoint);
         this.setState({
@@ -52,14 +74,15 @@ export default class ProductGrid extends React.Component{
     render(){
         const { doneLoading } = this.state;
         const {categories} = this.state;
-        console.log(categories)
+        console.log(categories);
         if(this.state.toggleForm && categories.length > 0){
             return(
                 <div>
-                    <Button color='primary'onClick={this.handleToggleForm}>Close</Button>
+                    <Button color='primary' onClick={this.handleToggleForm}>Close</Button>
                     <Filters 
                         categories={categories}
                         handleSelectedCategories={this.handleSelectedCategories}
+                        handleClearFilters={this.handleClearFilters}
                         />
                 </div>
             )
@@ -74,7 +97,6 @@ export default class ProductGrid extends React.Component{
 
                     <ProductTable 
                         products={this.state.products}
-                        handleAddOrEditProduct={this.props.handleAddOrEditProduct}
                     />
                 </div>
             )
@@ -83,10 +105,6 @@ export default class ProductGrid extends React.Component{
 }
 
 class ProductTable extends React.Component{
-
-    addProduct = (id) =>{
-       this.props.handleAddOrEditProduct(id)
-    }
 
     render(){
         const products = this.props.products;
@@ -98,12 +116,12 @@ class ProductTable extends React.Component{
                         <th>Title</th>
                         <th>Category</th>
                         <th>Value</th>
-                        <th></th>
+                        <th>#</th>
                     </tr>
                 </thead>
                 <tbody>
                     {products.map((product, index)=>(
-                        <ProductTableTr product={product} addProduct={this.addProduct} />
+                        <ProductTableTr product={product} />
                     ))}
                 </tbody>
             </Table>
@@ -113,9 +131,17 @@ class ProductTable extends React.Component{
 
 class ProductTableTr extends React.Component{
 
+    static PropTypes = {
+        product: PropTypes.object
+    };
+
+    static contextTypes = {
+        handleAddOrEditProduct: PropTypes.func
+    };
+
     addProduct = () => {
-        this.props.addProduct(this.props.product.id)
-    }
+        this.context.handleAddOrEditProduct(this.props.product.id)
+    };
 
     render(){
         const {product} = this.props;
@@ -125,7 +151,7 @@ class ProductTableTr extends React.Component{
                 <td>{product.title}</td>
                 <td>{product.tag_category}</td>
                 <td>{product.tag_value}</td>
-                <td><Button color="success" onClick={this.addProduct}>Add {product.id}</Button></td>
+                <td><Button color="success" onClick={this.addProduct}>Add</Button></td>
             </tr>
         )
     }

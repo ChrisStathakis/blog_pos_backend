@@ -38,7 +38,7 @@ class Products extends React.Component{
     }
 
     getCategories(){
-        const endpoint = 'http://127.0.0.1:8000/api/category-list/'
+        const endpoint = 'http://127.0.0.1:8000/api/category-list/';
         const thisComp = this;
         let lookUpOptions = {
             method: 'GET',

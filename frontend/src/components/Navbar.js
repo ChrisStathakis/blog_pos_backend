@@ -28,35 +28,25 @@ export default class MyNavbar extends React.Component {
   }
   render() {
     return (
-      <div>
-        <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/">Homepage</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="/products/">Products</NavLink>
-              </NavItem>
-              <UncontrolledDropdown nav>
-                <DropdownToggle nav caret>
-                  List
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Create
-                  </DropdownItem>
-                  <DropdownItem>
-                    Categories
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
+        <div>
+            <Navbar color="light" light expand="md">
+                <NavbarBrand href="/">reactstrap</NavbarBrand>
+                <NavbarToggler onClick={this.toggle} />
+                <Collapse isOpen={this.state.isOpen} navbar>
+                    <Nav className="ml-auto" navbar>
+                        <NavItem>
+                            <NavLink href="/">Homepage</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/products/">Products</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/reports/">Reports</NavLink>
+                        </NavItem>
+                    </Nav>
+                </Collapse>
+            </Navbar>
+        </div>
     );
   }
 }

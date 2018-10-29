@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withRouter, Redirect} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap';
 import MyNavbar from '../components/Navbar.js';
 import ProductGrid from '../components/ProductTable.js'
 import OrderDetails from '../components/OrderDetails.js'
-import Filters from '../components/Filters.js'
-import {postData, fetchData, postQtyChange, putData, addOrEditProduct } from '../components/fetch_data.js'
+import {fetchData, postQtyChange, putData, addOrEditProduct } from '../helpers/fetch_data.js'
+import {PRODUCTS_ENDPOINT, ORDER_ITEMS_ENDPOINT, ORDER_ENDPOINT} from '../helpers/endpoints.js'
+
 
 class Order extends React.Component{
 
@@ -20,16 +22,24 @@ class Order extends React.Component{
         }
     }
 
+    static childContextTypes = {
+        handleAddOrEditProduct: PropTypes.func
+    };
+
+    getChildContext(){
+        return {
+            handleAddOrEditProduct: this.handleAddOrEditProduct
+        }
+    }
+
     getOrderItems(id){
-        const endpoint = `http://127.0.0.1:8000/api/order-item-list?order_related=${id}`;
+        const endpoint = ORDER_ITEMS_ENDPOINT + '?order_related=' + id;
         const thisComp = this;
         fetchData(endpoint, thisComp, 'order_items')
     }
 
-    
-
     getOrder(id){
-        const endpoint = `http://127.0.0.1:8000/api/order-detail/${id}/`;
+        const endpoint = ORDER_ENDPOINT+ id + '/';
         const thisComp = this;
         fetchData(endpoint, thisComp, 'order_data');
         
@@ -43,7 +53,7 @@ class Order extends React.Component{
     handleAddOrEditProduct = (product_id) => {
         const thisComp = this;
         addOrEditProduct(this.state.order_data.id, product_id, thisComp);
-    }
+    };
 
     handleTableActions = (action) => {
         const thisComp = this;
@@ -56,15 +66,12 @@ class Order extends React.Component{
                     table: order.table,
                     active: false,
                 };
-                const endpoint = `http://127.0.0.1:8000/api/order-detail/${order.id}/`;
-                putData(endpoint, data,);
-                thisComp.props.history.push('/')
-            case 'BACK':
-                thisComp.props.history.push('/')
+                const endpoint = ORDER_ENDPOINT + order.id + '/';
+                putData(endpoint, data,)
         }
+        thisComp.props.history.push('/')
     };
 
-    
     componentDidMount(){
         const {id} = this.props.match.params;
         this.getOrder(id) ;
@@ -83,28 +90,29 @@ class Order extends React.Component{
                 <Container>
                     {this.state.doneLoading ?
                         <Row>
-                            <Col xs="6">
+                            <Col xs="6" sm="12">
                                 <h4 className='header'>Products</h4>
-                                {doneLoading ? <ProductGrid 
-                                                    handleAddOrEditProduct={this.handleAddOrEditProduct}
-                                                    handleSelectedCategories={this.handleSelectedCategories}                                                             
-                                                /> 
+                                {doneLoading ?
+                                    <ProductGrid
+                                        handleSelectedCategories={this.handleSelectedCategories}
+                                    />
                                 : <p>No data</p>
                                 }
                                 
                             </Col>
-                            <Col xs="6">
+                            <Col xs="6" sm="12">
                                 <h4 className='header'> Order Details </h4>
-                                <Filters categories={this.state.categories}
-                                         filterProducts={this.filterProducts}
-                                />
                                 <br />
-                                {doneLoading ?<OrderDetails 
-                                                    order_data={this.state.order_data} 
-                                                    order_items={this.state.order_items} 
-                                                    changeQty={this.changeQty}
-                                                    handleTableActions={this.handleTableActions}
-                                               /> :<p>No Data</p>}
+                                {doneLoading ?
+                                    <OrderDetails
+                                        order_data={this.state.order_data}
+                                        order_items={this.state.order_items}
+                                        changeQty={this.changeQty}
+                                        handleTableActions={this.handleTableActions}
+                                    />
+                                    :
+                                    <p>No Data</p>
+                                }
                             </Col>
                         </Row>
                         :
@@ -116,7 +124,5 @@ class Order extends React.Component{
     }
 
 }
-
-
 
 export default withRouter(Order);

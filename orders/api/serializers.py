@@ -22,7 +22,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'title', 'tag_value', 'table', 'tag_table', 'active', 'url']
+        fields = ['id', 'timestamp', 'tag_timestamp', 'title', 'tag_value', 'table', 'tag_table', 'active', 'tag_active', 'url']
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):

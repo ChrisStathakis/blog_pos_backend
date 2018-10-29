@@ -1,102 +1,98 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter, Redirect} from 'react-router-dom';
 import { Container, Row, Col, CardText } from 'reactstrap'
 import MyNavbar from '../components/Navbar.js';
 import TableCart from '../components/TableCard.js'
-import fetchData from '../components/fetch_data'
+import {fetchData} from '../helpers/fetch_data.js'
+import {TABLES_ENDPOINT, ORDERS_ENDPOINT} from '../helpers/endpoints.js';
+
 
 class Homepage extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      tables: [],
-      doneLoading: false,
-      table: undefined,
+        tables: [],
+        doneLoading: false,
+        table: undefined,
+        new_order: false,
+        new_order_id:''
     }
   }
 
   getTables() {
-    const endpoint = 'http://127.0.0.1:8000/api/table-list/';
-    const thisComp = this;
-    let lookupOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
+      const endpoint = TABLES_ENDPOINT;
+      const thisComp = this;
+      let lookupOptions = {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      };
 
-    fetch(endpoint, lookupOptions).then(
-      function(response) {
-        return response.json()
-      }
-    ).then(function(responseData){
-      console.log(responseData);
-      thisComp.setState({
-        tables: responseData,
-        doneLoading: true
-      })
-    })
+      fetch(endpoint, lookupOptions).then(
+          function(response) {
+              return response.json()
+          }
+          ).then(function(responseData){
+              thisComp.setState({
+                  tables: responseData,
+                  doneLoading: true
+              })
+          })
   }
 
+  updateTables = () => {
+      this.getTables()
+  };
+
   getTable = (id) => {
-    console.log('click getTable');
-    const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`;
-    const thisComp = this;
-    let lookupOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    };
-    
-    fetch(endpoint, lookupOptions).then(
-      function(response) {
-        console.log('works!');
-        return response.json()
-      }
-    ).then(function(responseData){
-      console.log('update table', responseData);
-      thisComp.setState({
-        table: responseData,
-      })
-    })
-    
+      const endpoint = `http://127.0.0.1:8000/api/table-detail/${id}/`;
+      const thisComp = this;
+      fetchData(endpoint, thisComp, 'table')
   };
 
   newOrder = (id) => {
-    const endpoint = `http://127.0.0.1:8000/api/order-list/`;
-    const thisComp = this;
-    const data = {
-      title: `Table ${id}`,
-      table: id,
-      active: true
-    };
-    let lookupOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    };
-
-    fetch(endpoint, lookupOptions).then(
-      function(response) {
-        return response.json()
-      }
-    ).then(function(responseData){
-        return <Redirect to={`/order/${responseData.id}/`} />
-    })
+      const endpoint = ORDERS_ENDPOINT;
+      const thisComp = this;
+      const data = {
+          title: `Table ${id}`,
+          table: id,
+          active: true
+      };
+      let lookupOptions = {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      };
+      fetch(endpoint, lookupOptions).then(
+          function(response) {
+              return response.json()
+          }
+          ).then(function(responseData){
+              thisComp.setState({
+                  new_order: true,
+                  new_order_id:responseData.id
+              })
+          })
   };
 
   componentDidMount(){
-    this.getTables()
+      this.getTables();
+      setInterval(this.updateTables, 5000)
   }
 
   render() {
       const doneLoading = this.state.doneLoading;
       const tables = this.state.tables;
+      const {new_order} = this.state;
+      if(new_order) {
+          const new_url = `/order/${this.state.new_order_id}/`;
+          return <Redirect to={new_url} />
+      }
       return (
           <div>
               <MyNavbar/>
@@ -117,32 +113,33 @@ class FilterContainer extends React.Component {
 
 class MyContainer extends React.Component{
 
-  render() {
-     const { tables } = this.props;
-     
-     return (
-         <div>
-             <Row>
-                 <Col xs="8">
-                     <Row>
-                         <h4 className='header'>Title</h4>
-                     </Row>
-                     <Row>
-                         { tables.map((table, index)=>(
-                             <TableCart table={table} newOrder={this.props.newOrder} />
-                         ))
-                         }
+    static propTypes = {
+        tables: PropTypes.array
+    };
+
+    render() {
+        const { tables } = this.props;
+
+        return (
+            <div>
+                <Row>
+                    <Col xs="8">
+                        <Row><h4 className='header'>Title</h4></Row>
+                        <Row>
+                            { tables.map((table, index)=>(
+                                <TableCart table={table} newOrder={this.props.newOrder} />
+                            ))
+                            }
                          </Row>
-                 </Col>
+                    </Col>
 
-                 <Col xs="4">
-                     <FilterContainer />
-                 </Col>
-             </Row>
-         </div>
-     )
-  }
-
+                    <Col xs="4">
+                        <FilterContainer />
+                    </Col>
+                </Row>
+            </div>
+        )
+    }
 }
 
 export default withRouter(Homepage);
