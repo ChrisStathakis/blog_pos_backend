@@ -72,4 +72,4 @@ class Products extends React.Component{
     }
 }
 
-export default Products
+export default Products;
