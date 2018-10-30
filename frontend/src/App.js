@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import Homepage from './views/Homepage.js';
 import Products from './views/Products.js';
 import Order from './views/Order.js';
-import Report from './views/Reports.js'
+import Report from './views/Reports.js';
+import Chat from './views/Chat.js'
 
 class App extends React.Component{
 
@@ -14,7 +15,7 @@ class App extends React.Component{
             <Route exact path="/products/" component={Products} />
             <Route exact path="/order/:id/" component={Order}/>
             <Route exact path="/reports/" component={Report} />
-
+            <Route exact path='/chat/' component={Chat} />
 
             <Route component={Homepage} />
         </Switch>

@@ -1,11 +1,13 @@
-export const FETCH_PEOPLE_REQUEST = 'FETCH_PEOPLE_REQUEST';
+import PRODUCTS_ENDPOINT from '../helpers/endpoints.js'
 
-function fetchPeopleRequest() {
-    return{type: FETCH_PEOPLE_REQUEST}
+const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
+
+
+
+
+function fetchProductsAction(parameters){
+    return{
+        type: FETCH_PRODUCTS,
+        parameters: PRODUCTS_ENDPOINT+ parameters
+    }
 }
-
-export const FETCH_PEOPLE_SUCCESS = 'FETCH_PEOPLE_SUCCESS';
-function fetchPeopleSuccess(people) {
-    return {type: FETCH_PEOPLE_SUCCESS, people}
-}
-
