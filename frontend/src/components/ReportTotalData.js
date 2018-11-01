@@ -19,16 +19,11 @@ export default class ReportTotalData extends React.Component{
         })
     };
 
-    handleClearFilters = () =>{
-        this.props.handleClearFilters()
-    };
-
     handleSelectedCategories = (selected_categories) => {
         this.props.handleSelectedCategories(selected_categories)
     };
 
     render(){
-
         if (this.state.toggleForm) {
             return (
                 <div>
@@ -36,7 +31,6 @@ export default class ReportTotalData extends React.Component{
                     <Button onClick={this.handleToggleForm} color='primary'>Close</Button>
                     <Filters
                         categories={this.props.categories}
-                        handleClearFilters={this.handleClearFilters}
                         handleSelectedCategories={this.handleSelectedCategories}
                     />
                 </div>

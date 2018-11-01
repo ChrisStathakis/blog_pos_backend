@@ -15,7 +15,7 @@ class ReportGrid extends React.Component{
                 <td>{order.tag_value}</td>
             </tr>
         ));
-
+        console.log('my orders!',this.props.orders)
         return(
             <div>
                 <h4 className='header'>Orders</h4>

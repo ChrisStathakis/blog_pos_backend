@@ -25,7 +25,6 @@ class Filters extends React.Component {
 
     };
 
-
     handleSelectedCategories = (id) => {
         this.setState({
             selected_categories: id

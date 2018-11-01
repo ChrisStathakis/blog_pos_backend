@@ -35,14 +35,13 @@ class Order extends React.Component{
     getOrderItems(id){
         const endpoint = ORDER_ITEMS_ENDPOINT + '?order_related=' + id;
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'order_items')
+        fetchData(endpoint, thisComp, 'order_items', true)
     }
 
     getOrder(id){
-        const endpoint = ORDER_ENDPOINT+ id + '/';
+        const endpoint = ORDER_ENDPOINT + id + '/';
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'order_data');
-        
+        fetchData(endpoint, thisComp, 'order_data', false);
     }
 
     changeQty = (action, item_id) => {
@@ -79,10 +78,6 @@ class Order extends React.Component{
         const {id} = this.props.match.params;
         this.getOrder(id) ;
         this.getOrderItems(id);
-        this.setState({
-            order_id: this.state.order_data.id,
-            doneLoading: true
-        })
     }
 
     render() {

@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MyNavbar from '../components/Navbar.js';
 import {Container, Row, Col} from 'reactstrap';
 import {fetchData } from '../helpers/fetch_data.js'
 import {withRouter} from "react-router-dom";
 import ReportGrid from '../components/ReportGrid.js'
 import ReportTotalData from "../components/ReportTotalData";
-import {ORDER_ITEMS_ENDPOINT, TABLES_ENDPOINT} from "../helpers/endpoints";
+import {ORDER_ITEMS_ENDPOINT, TABLES_ENDPOINT, ORDERS_ENDPOINT} from "../helpers/endpoints";
 
 class Report extends React.Component {
 
@@ -18,40 +19,43 @@ class Report extends React.Component {
             date_end: new Date(),
             doneLoading: false
         }
-
     }
 
-    getOrders(endpoint){
+    static  childContextTypes = {
+        clearFilters: PropTypes.func
+    };
 
+    getChildContext(){
+        return{
+            clearFilters: this.handleClearFilters
+        }
+    }
+
+    getOrders(endpoint, type_=false){
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'orders')
+        fetchData(endpoint, thisComp, 'orders', type_)
     }
 
     getTables(){
         const endpoint = TABLES_ENDPOINT;
         const thisComp = this;
-        fetchData(endpoint, thisComp, 'tables')
+        fetchData(endpoint, thisComp, 'tables', true)
     }
 
     handleClearFilters = () => {
-        const endpoint = 'http://127.0.0.1:8000/api/order-list/';
-        this.getOrders(endpoint);
+        this.componentDidMount()
     };
 
     handleSelectedCategories = (selectedCategories) =>{
         if(selectedCategories){
-            const endpoint = ORDER_ITEMS_ENDPOINT + '?table=' + selectedCategories;
+            const endpoint = ORDERS_ENDPOINT + '?table=' + selectedCategories;
             this.getOrders(endpoint)
         }
     };
 
     componentDidMount() {
-        const endpoint = 'http://127.0.0.1:8000/api/order-list/';
-        this.getOrders(endpoint);
+        this.getOrders(ORDERS_ENDPOINT, false);
         this.getTables();
-        this.setState({
-            doneLoading: true
-        })
     }
     
     render() {
@@ -66,7 +70,6 @@ class Report extends React.Component {
                         <Col xs="4">
                             <ReportTotalData
                                 categories={this.state.tables}
-                                handleClearFilters={this.handleClearFilters}
                                 handleSelectedCategories={this.handleSelectedCategories}
                             />
                         </Col>

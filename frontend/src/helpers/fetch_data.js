@@ -1,16 +1,43 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
-
-function postData(endpoint, data) {
-    let lookupOptions = {
+function lookupOptionsPOST(data) {
+    return {
         method: 'POST',
         headers: {
-            'Content-Type':'application/json'
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data) 
-    };
-    fetch(endpoint, lookupOptions).then(
+        body: JSON.stringify(data)
+    }
+
+}
+
+let lookupOptionsGET = {
+    method: "GET",
+    headers: {
+        'Content-Type': 'application/json'
+    }
+};
+
+let lookupOptionsDEL = {
+    method: 'DELETE',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+};
+function lookupOptionsPUT(data) {
+    return {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+}
+
+
+function postData(endpoint, data) {
+    fetch(endpoint, lookupOptionsPOST).then(
         function(response) {
             return response.json()
         }
@@ -41,21 +68,16 @@ function putData(endpoint, data) {
     )
 }
 
-function fetchData(endpoint, thisComp, state) {
-    let lookupOptions = {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    fetch(endpoint, lookupOptions).then(
+function fetchData(endpoint, thisComp, state, doneLoading) {
+    fetch(endpoint, lookupOptionsGET).then(
       function (response) {
           return response.json()
       }
     ).then(
         function (responseData) {
             thisComp.setState({
-                [state]: responseData
+                [state]: responseData,
+                doneLoading: doneLoading
             })
 
         }
@@ -69,12 +91,6 @@ function postQtyChange(action, id, thisComp) {
     const endpoint = `http://127.0.0.1:8000/api/order-item-detail/${id}/`;
     switch (action){
         case 'ADD':
-            let lookupOptionsGET = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
             fetch(endpoint, lookupOptionsGET).then(
                 function(response) {
                     return response.json()
@@ -88,13 +104,6 @@ function postQtyChange(action, id, thisComp) {
                         order_related: item.order_related,
                         qty: item.qty + 1
                     };
-                    let lookupOptionsPOST = {
-                        method: 'PUT',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                      };
                     fetch(endpoint, lookupOptionsPOST).then(
                         function(response){
                             return response.json()
@@ -108,13 +117,7 @@ function postQtyChange(action, id, thisComp) {
             );
             break;
         case 'REMOVE':
-            let lookupOptionsGET_ = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            fetch(endpoint, lookupOptionsGET_).then(
+            fetch(endpoint, lookupOptionsGET).then(
                 function(response) {
                     return response.json()
                 }
@@ -126,14 +129,6 @@ function postQtyChange(action, id, thisComp) {
                         product_related: item.product_related,
                         order_related: item.order_related,
                         qty: item.qty - 1
-                    };
-                    let lookupOptionsPOST = {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                
                     };
                     fetch(endpoint, lookupOptionsPOST).then(
                         function(response){
@@ -148,12 +143,6 @@ function postQtyChange(action, id, thisComp) {
             );
             break;
         case 'DELETE':
-            let lookupOptionsDEL = {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
             fetch(endpoint, lookupOptionsDEL).then(
                 function(){
                     thisComp.componentDidMount()
@@ -168,13 +157,7 @@ function postQtyChange(action, id, thisComp) {
 
 function addOrEditProduct(order_id, product_id, thisComp) {
     const endpoint = `http://127.0.0.1:8000/api/order-item-list?product_related=${product_id}&order_related=${order_id}`;
-    const lookupOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    fetch(endpoint, lookupOptions).then(
+    fetch(endpoint, lookupOptionsGET).then(
         function(response){
             return response.json()
         }
@@ -189,13 +172,7 @@ function addOrEditProduct(order_id, product_id, thisComp) {
                 qty: responseData[0].qty + 1
             }
             console.log('edit product data', data)
-            let lookupOptionsPUT = {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }
+
             fetch(`http://127.0.0.1:8000/api/order-item-detail/${responseData[0].id}/`, lookupOptionsPUT).then(
                 function(response){
                     return response.json()
@@ -226,11 +203,6 @@ function addOrEditProduct(order_id, product_id, thisComp) {
     })
 }
 
-let lookupOptionsGET = {
-    method:'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
 
-export {fetchData, postData, postQtyChange, putData, addOrEditProduct, lookupOptionsGET}
+
+export {fetchData, postData, postQtyChange, putData, addOrEditProduct, lookupOptionsGET, lookupOptionsPOST}
