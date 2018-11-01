@@ -25,7 +25,7 @@ export default class MyNavbar extends React.Component {
   render() {
     return (
         <div>
-            <Navbar color="light" light expand="md">
+            <Navbar color="light" light>
                 <NavbarBrand href="/">reactstrap</NavbarBrand>
                 <NavbarToggler onClick={this.toggle} />
                 <Collapse isOpen={this.state.isOpen} navbar>

@@ -9,13 +9,13 @@ class App extends React.Component{
 
   render(){
     return(
-      <BrowserRouter>
-        <Switch>
-            <Route exact path="/products/" component={Products} />
-            <Route exact path="/order/:id/" component={Order}/>
-            <Route exact path="/reports/" component={Report} />
+      <BrowserRouter key='1'>
+        <Switch key='01'>
+            <Route key='001' exact path="/products/" component={Products} />
+            <Route key='002' exact path="/order/:id/" component={Order}/>
+            <Route key='003' exact path="/reports/" component={Report} />
 
-            <Route component={Homepage} />
+            <Route key='004' component={Homepage} />
         </Switch>
       </BrowserRouter>
     )

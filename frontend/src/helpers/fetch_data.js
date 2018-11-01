@@ -104,13 +104,14 @@ function postQtyChange(action, id, thisComp) {
                         order_related: item.order_related,
                         qty: item.qty + 1
                     };
-                    fetch(endpoint, lookupOptionsPOST).then(
+                    fetch(endpoint, lookupOptionsPUT(data)).then(
                         function(response){
                             return response.json()
                         }
                     ).then(
                         function(responseData){
-                            thisComp.componentDidMount()
+                            thisComp.getOrderItems(item.order_related)
+                            thisComp.getOrder(item.order_related)
                         }
                     )
                 }
@@ -130,13 +131,14 @@ function postQtyChange(action, id, thisComp) {
                         order_related: item.order_related,
                         qty: item.qty - 1
                     };
-                    fetch(endpoint, lookupOptionsPOST).then(
+                    fetch(endpoint, lookupOptionsPUT(data)).then(
                         function(response){
                             return response.json()
                         }
                     ).then(
                         function(responseData){
-                            thisComp.componentDidMount()
+                            thisComp.getOrderItems(item.order_related)
+                            thisComp.getOrder(item.order_related)
                         }
                     )
                 }
@@ -173,31 +175,25 @@ function addOrEditProduct(order_id, product_id, thisComp) {
             }
             console.log('edit product data', data)
 
-            fetch(`http://127.0.0.1:8000/api/order-item-detail/${responseData[0].id}/`, lookupOptionsPUT).then(
+            fetch(`http://127.0.0.1:8000/api/order-item-detail/${responseData[0].id}/`, lookupOptionsPUT(data)).then(
                 function(response){
                     return response.json()
                 }
             ).then(function(responseData){thisComp.componentDidMount()})
         } else {
             console.log('new product');
-            const data_ = {
+            const data = {
                 product_related: product_id,
                 order_related: order_id,
                 qty: 1
             };
-            let lookupOptionsPOST = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data_)
-            };
-            fetch('http://127.0.0.1:8000/api/order-item-list', lookupOptionsPOST).then(
+            
+            fetch('http://127.0.0.1:8000/api/order-item-list', lookupOptionsPOST(data)).then(
                 function(response){
                     return response.json()
                 }
             ).then(function(responseData){
-                console.log(thisComp.componentDidMount())
+                thisComp.componentDidMount()
             })
         }
     })

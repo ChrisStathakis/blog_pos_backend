@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 
 export default class ProductForm extends React.Component{
     constructor(props){
@@ -107,31 +105,3 @@ export default class ProductForm extends React.Component{
 }
 
 
-class InputComponent extends React.Component{
-
-    static propTypes = {
-        label: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        value: PropTypes.string,
-        validate: PropTypes.func,
-        onChange: PropTypes.func.isRequired
-    }
-
-    state = {
-        value: this.props.value,
-        error: false
-    }
-
-    componentWillReceiveProps(update) {
-        this.setState({ value:update.value})
-    }
-
-    onChange = (e) => {
-        const {name} = this.props;
-        const {value} = this.value;
-        const error = this.props.validate ? this.props.validate(value) : false;
-        this.setState({ value, error})
-        this.props.onChange({name, value, error})
-    }
-}

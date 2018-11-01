@@ -4,7 +4,7 @@ from django.urls import path
 from orders.api.views import (TableListAPIView, TableDetailAPIView,
                               OrderListAPIView, OrderDetailAPIView,  
                               OrderItemListAPIView, OrderItemDetailAPIView,
-                              ApiHomepage
+                              ApiHomepage, ReportOrderApiView
                             )   
 
 from products.api.views import ProductListAPIView, ProductDetailAPIView, CategoryListApiView
@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/product-list/', ProductListAPIView.as_view(), name='product_list'),
     path('api/product-detail/<int:pk>/', ProductDetailAPIView.as_view(), name='product_detail'),
     path('api/category-list/', CategoryListApiView.as_view(), name='category_list'),
+    path('api/orders/reports/', ReportOrderApiView),
     
     
 

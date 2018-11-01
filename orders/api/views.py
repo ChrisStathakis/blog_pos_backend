@@ -7,9 +7,11 @@ from .serializers import (TableListSerializer, TableDetailSerializer,
                           OrderListSerializer, OrderDetailSerializer,
                           OrderItemListSerializer, OrderItemDetailSerializer
                         )
-
+from django.db.models import Sum
+from django.conf import settings
 from ..models import Table, Order, OrderItem
 
+CURRENCY = settings.CURRENCY
 
 @api_view(['GET'])
 def ApiHomepage(request, format=None):
@@ -20,6 +22,21 @@ def ApiHomepage(request, format=None):
         'products': reverse('product_list', request=request, format=format),
         'categories': reverse('category_list', request=request, format=format),
         
+    })
+
+
+@api_view(['GET'])
+def ReportOrderApiView(request, format=None):
+    table_name = request.GET.get('table', None)
+    orders = Order.objects.all()
+    orders = orders.filter(table__id=table_name) if table_name else orders
+    total_value = orders.aggregate(Sum('value'))['value__sum'] if orders else 0
+    total_orders = orders.count() if orders else 0
+    average_order = round(total_value/total_orders, 2) if total_orders > 0 else 0
+    return Response({
+        'count': total_orders,
+        'total': f'{total_value} {CURRENCY}',
+        'avg': f'{average_order} {CURRENCY}',
     })
 
 

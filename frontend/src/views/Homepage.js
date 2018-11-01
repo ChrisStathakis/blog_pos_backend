@@ -7,7 +7,7 @@ import TableCart from '../components/TableCard.js'
 import {fetchData} from '../helpers/fetch_data.js'
 import {TABLES_ENDPOINT, ORDERS_ENDPOINT} from '../helpers/endpoints.js';
 import {TABLE_DETAIL_ENDPOINT} from "../helpers/endpoints";
-import {lookupOptionsPOST, postData} from "../helpers/fetch_data";
+import {lookupOptionsPOST} from "../helpers/fetch_data";
 
 
 class Homepage extends React.Component {
@@ -73,7 +73,7 @@ class Homepage extends React.Component {
       return (
           <div>
               <MyNavbar/>
-              <Container>{doneLoading !== false ? <MyContainer tables={tables} newOrder={this.newOrder} /> : <p>No data</p>}
+              <Container key={1}>{doneLoading !== false ? <MyContainer key={1} tables={tables} newOrder={this.newOrder} /> : <p>No data</p>}
               </Container>
           </div>
       )
