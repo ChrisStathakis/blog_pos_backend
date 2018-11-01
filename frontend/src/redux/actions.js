@@ -1,13 +1,13 @@
-import PRODUCTS_ENDPOINT from '../helpers/endpoints.js'
+import {PRODUCTS_ENDPOINT} from '../helpers/endpoints.js'
 
-const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
-
-
+const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
 
 
-function fetchProductsAction(parameters){
+
+
+export default function fetchProductsAction(){
     return{
         type: FETCH_PRODUCTS,
-        parameters: PRODUCTS_ENDPOINT+ parameters
+        url: PRODUCTS_ENDPOINT
     }
 }

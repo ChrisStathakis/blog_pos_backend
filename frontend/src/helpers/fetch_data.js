@@ -226,4 +226,11 @@ function addOrEditProduct(order_id, product_id, thisComp) {
     })
 }
 
-export {fetchData, postData, postQtyChange, putData, addOrEditProduct}
+let lookupOptionsGET = {
+    method:'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+export {fetchData, postData, postQtyChange, putData, addOrEditProduct, lookupOptionsGET}

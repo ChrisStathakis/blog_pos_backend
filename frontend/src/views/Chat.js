@@ -1,93 +1,83 @@
 import React from 'react';
 import uuid from 'uuid';
-import MyNavbar from '../components/Navbar';
 import {createStore} from 'redux';
-import { Container, Col, Row } from 'reactstrap';
-
-/*
-function createStore(reducer, initialState){
-    let state = initialState;
-    const listeners = [];
-    const subscribe = (listener) =>{
-        listeners.push(listener)
-    };
-
-    const getState = () => (state);
-
-    const dispatch = (action) => {
-        state = reducer(state, action);
-        listeners.forEach(l=>l())
-    };
-
-    return {
-        dispatch,
-        getState,
-        subscribe
-    }
-
-}
-*/
+import MyNavbar from "../components/Navbar";
 
 function reducer(state, action) {
     switch (action.type){
         case 'ADD_MESSAGE':
             const newMessage = {
                 text: action.message,
-                id: uuid.v4(),
-                timestamp: Date.now()
-            }
+                timestamp: Date.now(),
+                id: uuid.v4()
+            };
             const threadIndex = state.threads.findIndex(
-                (t) => t.id == action.threadId
-            )
+                (t) => t.id === action.id
+            );
             const oldThread = state.threads[threadIndex];
             const newThread = {
                 ...oldThread,
                 messages: oldThread.messages.concat(newMessage)
-            }
-            return {
+            };
+            return{
                 ...state,
-                threads: [
+                threads:[
                     ...state.threads.slice(0, threadIndex),
                     newThread,
                     ...state.threads.slice(threadIndex+1, state.threads.length)
                 ]
             };
         case 'DELETE_MESSAGE':
-            return{
-                messages: state.messages.filter((m)=>(
+            const threadIndex = state.threads.findIndex(
+                (t) => t.messages.find((m)=>
+                    m.id === action.id)
+            );
+            const oldThread = state.threads[threadIndex];
+
+            const newThread = {
+                ...oldThread,
+                messages: oldThread.messages.filter((m)=>(
                     m.id !== action.id
-                )) 
+                ))
             };
-        default:
-            return state
+
+            return {
+                ...state,
+                threads: [
+                    ...state.threads.slice(0, threadIndex),
+                    newThread,
+                    ...state.threads.slce(threadIndex+1, state.threads.length)
+                ]
+            }
+
     }
 }
 
 const initialState = {
-    activeThreadId: '1-fca2',
-    threads: [
-      {
-        id: '1-fca2',
-        title: 'Buzz Aldrin',
-        messages: [
-          {
-            text: 'Twelve minutes to ignition.',
-            timestamp: Date.now(),
-            id: uuid.v4(),
-          },
-        ],
-      },
-      {
-        id: '2-be91',
-        title: 'Michael Collins',
-        messages: [],
-      },
-    ],
-  };
+  activeThreadId: '1-fca2',
+  threads: [
+    {
+      id: '1-fca2',
+      title: 'Buzz Aldrin',
+      messages: [
+        {
+          text: 'Twelve minutes to ignition.',
+          timestamp: Date.now(),
+          id: uuid.v4(),
+        },
+      ],
+    },
+    {
+      id: '2-be91',
+      title: 'Michael Collins',
+      messages: [],
+    },
+  ],
+};
 
 const store = createStore(reducer, initialState);
 
-class Chat extends React.Component{
+class ChatPage extends React.Component{
 
     componentDidMount(){
         store.subscribe(()=>this.forceUpdate())
@@ -97,22 +87,21 @@ class Chat extends React.Component{
         const state = store.getState();
         const activeThreadId = state.activeThreadId;
         const threads = state.threads;
-        const activeThread = threads.find((t) => t.id === activeThreadId);
-        const tabs = threads.map(t=> (
-            {
-                title: t.title,
-                active: t.id === activeThreadId
-            }
-        ))
-        
-        return (
+        const activeThread = threads.find((t)=>t.id === activeThreadId);
+
+        const tabs = threads.map(t=>({
+            title:t.title,
+            active: t.id === activeThreadId
+        }))
+
+        return(
             <div>
-                <MyNavbar />
+                <MyNavbar/>
                 <Container>
                     <Row>
                         <Col>
-                            <MessageView messages={messages} />
-                            <MessageInput />
+                            <ThreadTabs tabs={}{tabs} />
+                            <Thread thread={activeThread} />
                         </Col>
                     </Row>
                 </Container>
@@ -121,66 +110,87 @@ class Chat extends React.Component{
     }
 }
 
-class MessageInput extends React.Component{
-
-    state = {
-        value: ''
-    }
-
-    onChange = (e) => {
-        e.preventDefault()
-        this.setState({
-            value: e.target.value
-        })
-        console.log('change!', this.state.value)
-    }
-
-    handleSubmit = (event) => {
-        event.preventDefault();
-        store.dispatch({
-            type: 'ADD_MESSAGE',
-            message: this.state.value
-        })
-        this.setState({
-            value:''
-        })
-    }
+class ThreadTabs extends React.Component{
 
     render(){
-        return(
-            <form>
-                <div className='form-group'>
-                    <label>Add message</label>
-                    <input type='text' onChange={this.onChange} value={this.state.value} />
-                </div>
-                <button className='btn btn-primary' onClick={this.handleSubmit}>Save</button>
-            </form>
-        )
-    }
-}
-
-class MessageView extends React.Component{
-
-    handleClick = (id) => {
-        store.dispatch({
-            type: 'DELETE_MESSAGE',
-            id: id
-        })
-    }
-
-    render(){
-        const messages = store.getState().messages.map((message, index)=>(
-            <p
+        const tabs = this.props.tabs.map((tab, index)=>(
+            <div
                 key={index}
-                onClick={()=>this.handleClick(message.id)}
-            >{message.text}@{message.timestamp}</p>
+                className={tab.active ? 'active item': 'item'}
+            >{tab.title}
+            </div>
         ))
-        return (
-            <div>
-                {messages}
+        return(
+            <div className='ui top attached tabular menu'>
+                {tabs}
             </div>
         )
     }
 }
 
-export default Chat;
+class MessageInput extends React.Component{
+    state = {
+        value: ''
+    };
+
+    onChange = (e) => {
+        e.preventDefault();
+        this.setState({
+            value: e.target.value
+        })
+    };
+
+    handleSubmit = (e) =>{
+        e.preventDefault();
+        store.dispatch({
+            type: 'ADD_MESSAGE',
+            message: this.state.value,
+            threadId: this.props.threadId
+        });
+
+        this.setState({
+            value: ''
+        })
+    }
+
+    render(){
+        return(
+            <form className='form'>
+                <input
+                    onChange={this.onChange}
+                    value={this.state.value}
+                    type='text'
+                    className='form-control'
+                />
+                <Button
+                    color='primary'
+                    onClick={this.handleSubmit}
+                    type='submit'
+                >Save
+                </Button>
+            </form>
+        )
+    }
+}
+
+class Thread extends React.Component{
+
+    handleClick = (id) =>{
+         store.dispatch({
+             type: 'DELETE_MESSAGE',
+             id:id
+         })
+     }
+
+     render() {
+        const messages = this.props.thread.messages.map((message, index)=>(
+            <div
+                className='comment'
+                key={index}
+                onClick={() => this.handleClick(message.id)}
+            ><p>{message.text}</p><span>@{message.timestamp}</span>
+
+            </div>
+        ))
+     }
+}

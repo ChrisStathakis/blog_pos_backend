@@ -6,6 +6,8 @@ import MyNavbar from '../components/Navbar.js';
 import TableCart from '../components/TableCard.js'
 import {fetchData} from '../helpers/fetch_data.js'
 import {TABLES_ENDPOINT, ORDERS_ENDPOINT} from '../helpers/endpoints.js';
+import store from '../redux/store.js'
+import fetchProductsAction from '../redux/actions.js'
 
 
 class Homepage extends React.Component {
@@ -82,10 +84,14 @@ class Homepage extends React.Component {
 
   componentDidMount(){
       this.getTables();
-      setInterval(this.updateTables, 5000)
+      setInterval(this.updateTables, 5000);
+      store.subscribe(()=>this.forceUpdate())
   }
 
   render() {
+      const store_data = store.getState();
+      store.dispatch(fetchProductsAction);
+      console.log('my store!', store_data);
       const doneLoading = this.state.doneLoading;
       const tables = this.state.tables;
       const {new_order} = this.state;
