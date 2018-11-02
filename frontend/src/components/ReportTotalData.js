@@ -20,7 +20,7 @@ export default class ReportTotalData extends React.Component{
     };
 
     handleSelectedCategories = (selected_categories) => {
-        this.props.handleSelectedCategories(selected_categories)
+        this.props.handleSelectedCategories(selected_categories);
         this.props.updateReport(selected_categories)
     };
 

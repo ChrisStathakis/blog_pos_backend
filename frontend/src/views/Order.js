@@ -23,12 +23,14 @@ class Order extends React.Component{
     }
 
     static childContextTypes = {
-        handleAddOrEditProduct: PropTypes.func
+        handleAddOrEditProduct: PropTypes.func,
+        changeQty: PropTypes.func
     };
 
     getChildContext(){
         return {
-            handleAddOrEditProduct: this.handleAddOrEditProduct
+            handleAddOrEditProduct: this.handleAddOrEditProduct,
+            changeQty: this.changeQty
         }
     }
 
@@ -45,13 +47,11 @@ class Order extends React.Component{
     }
 
     changeQty = (action, item_id) => {
-        const thisComp = this;
-        postQtyChange(action, item_id, thisComp);
+        postQtyChange(action, item_id, this);
     };
 
     handleAddOrEditProduct = (product_id) => {
-        const thisComp = this;
-        addOrEditProduct(this.state.order_data.id, product_id, thisComp);
+        addOrEditProduct(this.state.order_data.id, product_id, this);
     };
 
     handleTableActions = (action) => {
@@ -105,7 +105,6 @@ class Order extends React.Component{
                                     <OrderDetails
                                         order_data={this.state.order_data}
                                         order_items={this.state.order_items}
-                                        changeQty={this.changeQty}
                                         handleTableActions={this.handleTableActions}
                                     />
                                     :

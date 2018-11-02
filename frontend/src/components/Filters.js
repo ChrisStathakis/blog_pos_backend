@@ -13,6 +13,10 @@ class Filters extends React.Component {
         }
     }
 
+    static PropTypes = {
+        categories: PropTypes.array
+    };
+
     static contextTypes = {
         clearFilters: PropTypes.func
     };
@@ -44,7 +48,6 @@ class Filters extends React.Component {
                         checked={category.id === this.state.selected_categories ? true: false}
                     />
                 ))}
-                
                 <Button onClick={this.handleClear} color='danger'>Clear Filters</Button>
             </Form>
         )
@@ -53,12 +56,22 @@ class Filters extends React.Component {
 
 class CheckBoxComponent extends React.Component{
 
+    state = {
+        field: this.props.field||''
+    };
+
+    static PropTypes = {
+        handleSelectedCategories: PropTypes.func,
+        field: PropTypes.object,
+        checked: PropTypes.bool
+    };
+
     handleChange = (e) => {
-        this.props.handleSelectedCategories(this.props.field.id)
+        this.props.handleSelectedCategories(this.state.field.id)
     };
 
     render(){
-        const field = this.props.field;
+        const {field} = this.state;
         return(
             <FormGroup check>
                 <label>{field.title}</label>

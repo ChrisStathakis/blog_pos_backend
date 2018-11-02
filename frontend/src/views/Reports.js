@@ -56,12 +56,11 @@ class Report extends React.Component {
             }
         ).then(
             function(responseData){
-                console.log('response', responseData)
                 const reports = {
                     total: responseData.total,
                     count: responseData.count,
                     avg: responseData.avg
-                }
+                };
                 thisComp.setState({
                      reports: reports
                 })
@@ -74,9 +73,9 @@ class Report extends React.Component {
     };
 
     updateReport = (selected_category) =>{
-        const endpoint = ORDER_REPORT_ENDPOINT+ '?table=' + selected_category
+        const endpoint = ORDER_REPORT_ENDPOINT+ '?table=' + selected_category;
         this.getReports(endpoint)
-    }
+    };
 
     handleSelectedCategories = (selectedCategories) =>{
         if(selectedCategories){

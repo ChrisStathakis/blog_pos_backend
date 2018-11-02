@@ -13,6 +13,7 @@ from ..models import Table, Order, OrderItem
 
 CURRENCY = settings.CURRENCY
 
+
 @api_view(['GET'])
 def ApiHomepage(request, format=None):
     return Response({
@@ -38,7 +39,6 @@ def ReportOrderApiView(request, format=None):
         'total': f'{total_value} {CURRENCY}',
         'avg': f'{average_order} {CURRENCY}',
     })
-
 
 
 class TableListAPIView(generics.ListAPIView):

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
+import {ORDER_ITEM_ENDPOINT, ORDER_ITEMS_ENDPOINT} from "./endpoints";
 
 function lookupOptionsPOST(data) {
     return {
@@ -9,7 +10,6 @@ function lookupOptionsPOST(data) {
         },
         body: JSON.stringify(data)
     }
-
 }
 
 let lookupOptionsGET = {
@@ -25,6 +25,7 @@ let lookupOptionsDEL = {
         'Content-Type': 'application/json'
     }
 };
+
 function lookupOptionsPUT(data) {
     return {
         method: 'PUT',
@@ -62,7 +63,6 @@ function putData(endpoint, data) {
         }
     ).then(
         function(responseData) {
-            console.log('almost redirect!');
             return <Redirect to='/' />;
         }
     )
@@ -84,37 +84,36 @@ function fetchData(endpoint, thisComp, state, doneLoading) {
     )
 }
 
-
 function postQtyChange(action, id, thisComp) {
     let item;
     let data;
-    const endpoint = `http://127.0.0.1:8000/api/order-item-detail/${id}/`;
+    const endpoint = ORDER_ITEM_ENDPOINT + `${id}/`;
     switch (action){
         case 'ADD':
             fetch(endpoint, lookupOptionsGET).then(
                 function(response) {
                     return response.json()
                 }
-            ).then(
-                function(responseData) {
-                    item = responseData;
-                    data = {
-                        id: item.id,
-                        product_related: item.product_related,
-                        order_related: item.order_related,
-                        qty: item.qty + 1
-                    };
-                    fetch(endpoint, lookupOptionsPUT(data)).then(
-                        function(response){
-                            return response.json()
-                        }
-                    ).then(
-                        function(responseData){
-                            thisComp.getOrderItems(item.order_related)
-                            thisComp.getOrder(item.order_related)
-                        }
-                    )
-                }
+                ).then(
+                    function(responseData) {
+                        item = responseData;
+                        data = {
+                            id: item.id,
+                            product_related: item.product_related,
+                            order_related: item.order_related,
+                            qty: item.qty + 1
+                        };
+                        fetch(endpoint, lookupOptionsPUT(data)).then(
+                            function(response){
+                                return response.json()
+                            }
+                        ).then(
+                            function(responseData){
+                                thisComp.getOrderItems(item.order_related);
+                                thisComp.getOrder(item.order_related)
+                            }
+                        )
+                    }
             );
             break;
         case 'REMOVE':
@@ -122,26 +121,26 @@ function postQtyChange(action, id, thisComp) {
                 function(response) {
                     return response.json()
                 }
-            ).then(
-                function(responseData) {
-                    item = responseData;
-                    data = {
-                        id: item.id,
-                        product_related: item.product_related,
-                        order_related: item.order_related,
-                        qty: item.qty - 1
-                    };
-                    fetch(endpoint, lookupOptionsPUT(data)).then(
-                        function(response){
-                            return response.json()
-                        }
-                    ).then(
-                        function(responseData){
-                            thisComp.getOrderItems(item.order_related)
-                            thisComp.getOrder(item.order_related)
-                        }
-                    )
-                }
+                ).then(
+                    function(responseData) {
+                        item = responseData;
+                        data = {
+                            id: item.id,
+                            product_related: item.product_related,
+                            order_related: item.order_related,
+                            qty: item.qty - 1
+                        };
+                        fetch(endpoint, lookupOptionsPUT(data)).then(
+                            function(response){
+                                return response.json()
+                            }
+                        ).then(
+                            function(responseData){
+                                thisComp.getOrderItems(item.order_related);
+                                thisComp.getOrder(item.order_related)
+                            }
+                        )
+                    }
             );
             break;
         case 'DELETE':
@@ -158,24 +157,24 @@ function postQtyChange(action, id, thisComp) {
 
 
 function addOrEditProduct(order_id, product_id, thisComp) {
-    const endpoint = `http://127.0.0.1:8000/api/order-item-list?product_related=${product_id}&order_related=${order_id}`;
+    const endpoint = ORDER_ITEMS_ENDPOINT + `?product_related=${product_id}&order_related=${order_id}`;
     fetch(endpoint, lookupOptionsGET).then(
         function(response){
             return response.json()
         }
     ).then(function(responseData){
-        let data = {}
+        let data = {};
         if (responseData.length > 0){
-            console.log('edit product', responseData)
+            console.log('edit product', responseData);
             data = {
                 id: responseData[0].id,
                 product_related: responseData[0].product_related,
                 order_related: responseData[0].order_related,
                 qty: responseData[0].qty + 1
-            }
-            console.log('edit product data', data)
+            };
+            console.log('edit product data', data);
 
-            fetch(`http://127.0.0.1:8000/api/order-item-detail/${responseData[0].id}/`, lookupOptionsPUT(data)).then(
+            fetch(ORDER_ITEM_ENDPOINT + `${responseData[0].id}/`, lookupOptionsPUT(data)).then(
                 function(response){
                     return response.json()
                 }
@@ -188,7 +187,7 @@ function addOrEditProduct(order_id, product_id, thisComp) {
                 qty: 1
             };
             
-            fetch('http://127.0.0.1:8000/api/order-item-list', lookupOptionsPOST(data)).then(
+            fetch(ORDER_ITEMS_ENDPOINT, lookupOptionsPOST(data)).then(
                 function(response){
                     return response.json()
                 }

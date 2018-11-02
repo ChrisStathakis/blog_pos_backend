@@ -1,8 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {Table} from 'reactstrap';
 
 
 class ReportGrid extends React.Component{
+
+    static PropTypes = {
+        orders: PropTypes.array
+    };
 
     render(){
         const orders = this.props.orders.map((order, index)=>(
@@ -15,7 +20,6 @@ class ReportGrid extends React.Component{
                 <td>{order.tag_value}</td>
             </tr>
         ));
-        console.log('my orders!',this.props.orders)
         return(
             <div>
                 <h4 className='header'>Orders</h4>
