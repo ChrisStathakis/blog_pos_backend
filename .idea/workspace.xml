@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="df52c7f0-d3fd-4cc7-bef1-922b60f4fd19" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Filters.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Filters.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/OrderDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/OrderDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ReportGrid.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ReportGrid.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ReportTotalData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ReportTotalData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/helpers/endpoints.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/helpers/endpoints.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/helpers/fetch_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/helpers/fetch_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/Order.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/Reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/api/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="df52c7f0-d3fd-4cc7-bef1-922b60f4fd19" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -133,7 +120,7 @@
       <path value="$PROJECT_DIR$/frontend/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="697" />
@@ -257,8 +244,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32913387" />
@@ -266,8 +252,8 @@
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.50073206" side_tool="true" visible="true" weight="0.22914466" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.159375" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.50073206" side_tool="true" visible="true" weight="0.22914466" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.159375" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="4" />

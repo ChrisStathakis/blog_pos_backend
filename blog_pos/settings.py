@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
 
-    'frontend',
     'products',
     'orders',
 ]
