@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from rest_framework.authtoken import views
 
 from orders.api.views import (TableListAPIView, TableDetailAPIView,
                               OrderListAPIView, OrderDetailAPIView,  
@@ -12,6 +13,7 @@ from products.api.views import ProductListAPIView, ProductDetailAPIView, Categor
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    path('auth/', views.obtain_auth_token,),
     path('api/', ApiHomepage),
     path('api/table-list/', TableListAPIView.as_view(), name='table_list'),
     path('api/table-detail/<int:pk>/', TableDetailAPIView.as_view(), name='table_detail'),
