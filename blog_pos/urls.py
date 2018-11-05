@@ -5,10 +5,11 @@ from rest_framework.authtoken import views
 from orders.api.views import (TableListAPIView, TableDetailAPIView,
                               OrderListAPIView, OrderDetailAPIView,  
                               OrderItemListAPIView, OrderItemDetailAPIView,
-                              ApiHomepage, ReportOrderApiView
+                              ApiHomepage, ReportOrderApiView,
+
                             )   
 
-from products.api.views import ProductListAPIView, ProductDetailAPIView, CategoryListApiView
+from products.api.views import ProductListAPIView, ProductDetailAPIView, CategoryListApiView,ProductListApiAuthView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,8 @@ urlpatterns = [
     path('api/product-detail/<int:pk>/', ProductDetailAPIView.as_view(), name='product_detail'),
     path('api/category-list/', CategoryListApiView.as_view(), name='category_list'),
     path('api/orders/reports/', ReportOrderApiView),
+
+    path('api/auth/products/', ProductListApiAuthView.as_view(), name='product_auth_view'),
     
     
 

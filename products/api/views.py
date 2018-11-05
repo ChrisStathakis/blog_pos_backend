@@ -23,3 +23,9 @@ class CategoryListApiView(generics.ListAPIView):
     serializer_class = CategoryListSerializer
     permission_classes = (permissions.AllowAny, )
     queryset = Category.objects.filter(active=True)
+
+
+class ProductListApiAuthView(generics.ListAPIView):
+    serializer_class = ProductListSerializer
+    permission_classes = (permissions.IsAuthenticated, )
+    queryset = Product.objects.all()
