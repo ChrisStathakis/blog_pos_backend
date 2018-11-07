@@ -6,7 +6,7 @@ from orders.api.views import (TableListAPIView, TableDetailAPIView,
                               OrderListAPIView, OrderDetailAPIView,  
                               OrderItemListAPIView, OrderItemDetailAPIView,
                               ApiHomepage, ReportOrderApiView,
-
+                              TableListApiAuthView  
                             )   
 
 from products.api.views import ProductListAPIView, ProductDetailAPIView, CategoryListApiView,ProductListApiAuthView
@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/orders/reports/', ReportOrderApiView),
 
     path('api/auth/products/', ProductListApiAuthView.as_view(), name='product_auth_view'),
+    path('api/auth/tables', TableListApiAuthView.as_view(), name='tables_auth_view' )
     
     
 

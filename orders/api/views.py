@@ -83,3 +83,9 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.AllowAny, )
     queryset = OrderItem.objects.all()
 
+
+
+class TableListApiAuthView(generics.ListAPIView):
+    serializer_class = TableListSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Table.objects.filter(active=True)
