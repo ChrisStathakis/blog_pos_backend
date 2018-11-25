@@ -25,7 +25,7 @@ SECRET_KEY = 'k+xi5)$l3ge!(-d59$nq_2@@3!l6e%fee*mpzgpshf%#*(rryp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['react-pos.herokuapp.com', 'localhost']
 
 
 # Application definition
